@@ -1,0 +1,31 @@
+.card {
+  transition: 
+    transform 0.3s ease, 
+    box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px); /* se levanta */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-text{
+    font-family: var(--font-primary-lato); 
+    color: var(--color-text-primary);
+}
+
+.card-title{
+    font-family: var(--font-header-pacifico);
+    color: var(--color-chocolate);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.producto__precio{
+    color: var(--color-chocolate);
+}
+
+.producto__descripcion{
+    color: var(--color-text-primary);
+    font-family: var(--font-primary-lato);
+}
