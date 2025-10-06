@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 
 import "bootstrap/dist/css/bootstrap.min.css"
-import Navbar from './components/Navbar.tsx'
+import Navbar from './components/Navbar/Navbar.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes/AppRoutes.tsx'
 
