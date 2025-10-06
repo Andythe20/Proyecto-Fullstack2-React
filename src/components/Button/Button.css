@@ -1,0 +1,19 @@
+.btnBrown {
+    background-color: var(--color-soft-pink);
+    font-family: var(--font-header-pacifico), sans-serif;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-chocolate);
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+}
+
+.btnBrown:hover{
+    background-color: var(--color-chocolate);
+    color: var(--color-soft-pink);
+    border-color: var(--color-soft-pink);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* sombra sutil */
+}
