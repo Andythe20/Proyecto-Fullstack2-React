@@ -1,16 +1,53 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+@font-face {
+    font-family: 'Lato';
+    src: url('./fonts/Lato/Lato-Regular.ttf')format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pacifico';
+  src: url('./fonts/Pacifico/Pacifico-Regular.ttf') format('woff2');
   font-weight: 400;
+  font-style: normal;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@media (max-width: 767.98px) {
+    #logo-container {
+        flex-direction: column !important;
+        text-align: center;
+    }
+    #logo-container img {
+        margin-bottom: 1rem;
+    }
+    #logo-container h1 {
+        font-size: 2rem;
+    }
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root{
+    --color-cream-pastel: #FFF5E1; /* Fondo Principal */
+    --color-soft-pink: #FFC0CB; /* Botones y elementos */
+    --color-chocolate: #8B4513; /* Botones y elementos */
+    --color-blanco-roto: #F8F6F4; /* Fondo de tarjetas y elementos secundarios */
+    --color-rosa-pastel: #FDEEEB; /* Fondo de tarjetas y elementos secundarios */
+
+    --color-text-primary: #5D4037;    /* Marrón Oscuro */
+    --color-text-secondary: #B0BEC5;  /* Gris Claro */
+
+    /* Fuentes */
+    --font-primary-lato: 'Lato', sans-serif; /* Texto general */
+    --font-header-pacifico: 'Pacifico', cursive; /* Titulos y encabezados */
+}
+
+::selection {
+  background: var(--color-chocolate); /* color de fondo al seleccionar */
+  color: var(--color-soft-pink);      /* color del texto seleccionado */
+}
+
+::-moz-selection { /* Para Firefox */
+  background: var(--color-chocolate);
+  color: var(--color-soft-pink);
 }
 
 a {
@@ -22,37 +59,18 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+body{
+    background-color: var(--color-cream-pastel);
+    font-family: var(--font-header-pacifico), cursive;
+    padding-top: 70px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+body h1 {
+    font-family: var(--font-header-pacifico);
+    color: var(--color-text-primary);
+    margin: 30px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
 
 @media (prefers-color-scheme: light) {
   :root {
