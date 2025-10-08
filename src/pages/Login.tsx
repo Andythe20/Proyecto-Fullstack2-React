@@ -1,3 +1,5 @@
+import Input from "../components/Input/Input";
+
 const Login = () => {
   return (
     <div className="container" style={{ marginTop: "-70px" }}>
@@ -15,6 +17,8 @@ const Login = () => {
 
         <form className="needs-validation" noValidate>
           <Input
+            id="email"
+            htmlFor="email"
             type="email"
             className="mb-3"
             title="Correo Electrónico"
