@@ -3,21 +3,21 @@ interface InputProps {
   className: string;
   txt: string;
   required?: boolean;
-  autoComplete?: string;
   id: string;
   htmlFor: string;
   type: string;
+  onBlurFunction?: () => void;
 }
 
 function Input({
-  type,
-  title,
   className,
+  htmlFor,
+  title,
+  id,
+  type,
   txt,
   required,
-  autoComplete,
-  id,
-  htmlFor,
+  onBlurFunction,
 }: InputProps) {
   return (
     <div className={className}>
@@ -30,8 +30,9 @@ function Input({
         className="form-control"
         placeholder={txt}
         required={required}
-        autoComplete={autoComplete}
+        onBlur={onBlurFunction}
       />
+      <div className="invalid-feedback">El {htmlFor} es inválido</div>
     </div>
   );
 }

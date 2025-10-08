@@ -59,19 +59,10 @@ a:hover {
   color: #535bf2;
 }
 
-<<<<<<< HEAD
-body {
-  margin: 0;
-  /*display: flex;
-  place-items: center;*/
-  min-width: 320px;
-  min-height: 100vh;
-=======
 body{
     background-color: var(--color-cream-pastel);
     font-family: var(--font-header-pacifico), cursive;
     padding-top: 70px;
->>>>>>> c02ed7052e3b34a5e189d0da2722272ca7ac7d30
 }
 
 body h1 {
