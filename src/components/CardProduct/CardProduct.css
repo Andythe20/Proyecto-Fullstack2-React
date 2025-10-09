@@ -21,6 +21,12 @@
     line-height: 1.2;
 }
 
+.card .card-img-top {
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  box-shadow: 0 4px 8px var(--color-chocolate);
+}
+
 .producto__precio{
     color: var(--color-chocolate);
 }

@@ -1,3 +1,4 @@
+import { useCarrito } from "../../hooks/useCarrito";
 import type { Product } from "../../types/product";
 import formatCurrency from "../../utils/formatCurrency";
 import showToastAlert from "../../utils/showToastAlert";
@@ -5,11 +6,20 @@ import Button from "../Button/Button";
 import './CardProduct.css'
 
 
+
 interface CardProductProps{
     product: Product
 }
 
 function CardProduct ({product}: CardProductProps){
+  const { addProduct } = useCarrito(); // Usar el hook para obtener la función addProduct
+
+  const handleAddToCart = () => {
+    addProduct(product);
+    showToastAlert(`¡${product.nombre} agregado!`);
+  }
+
+
 return (
     <div className="col-12 col-md-6 col-lg-4 d-flex">
       <div className="card mx-auto shadow-sm btnConcavo d-flex flex-column w-100">
@@ -40,7 +50,7 @@ return (
               text="Agregar"
               className="btn btnBrown mt-auto fs-5"
               icon="fas fa-shopping-cart"
-              onClick={ () => showToastAlert(`¡${product.nombre} agregado!`)}         
+              onClick={ handleAddToCart }         
             />
           </div>
         </form>
