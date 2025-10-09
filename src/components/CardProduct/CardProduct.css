@@ -25,6 +25,12 @@
     color: var(--color-chocolate);
 }
 
+.producto__codigo{
+    color: var(--color-text-primary);
+    font-family: var(--font-primary-lato);
+    margin-bottom: 10px;
+}
+
 .producto__descripcion{
     color: var(--color-text-primary);
     font-family: var(--font-primary-lato);

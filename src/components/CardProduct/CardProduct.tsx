@@ -32,7 +32,7 @@ return (
                 {formatCurrency(product.precio)}
               </span>
             </p>
-            <small>Código: {product.codigo}</small>
+            <small className="producto__codigo">Código: {product.codigo}</small>
             <p className="flex-grow-1 producto__descripcion">
               {product.descripcion || ""}
             </p>
