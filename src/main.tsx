@@ -7,13 +7,16 @@ import Navbar from './components/Navbar/Navbar.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes/AppRoutes.tsx'
 import Footer from "./components/Footer/Footer.tsx";
+import { CarritoProvider } from "./context/CarritoProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Navbar />
-      <AppRoutes />
-    </BrowserRouter>
-    <Footer/>
+    <CarritoProvider>
+      <BrowserRouter>
+        <Navbar />
+        <AppRoutes />
+      </BrowserRouter>
+      <Footer/>
+    </CarritoProvider>
   </StrictMode>
 );

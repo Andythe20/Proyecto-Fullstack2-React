@@ -1,8 +1,9 @@
-import type { Product } from "../types/product";
+import type { Product } from "../../types/product";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import CardProduct from "../components/CardProduct/CardProduct";
-import ProductSkeleton from "../components/ProductSkeleton/ProductSkeleton";
+import CardProduct from "../../components/CardProduct/CardProduct";
+import ProductSkeleton from "../../components/ProductSkeleton/ProductSkeleton";
+import './Productos.css';
 
 function Products() {
   const [productos, setProductos] = useState<Product[]>([]);
