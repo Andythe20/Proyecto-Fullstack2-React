@@ -1,0 +1,56 @@
+.card-text{
+    font-family: var(--font-primary-lato); 
+    color: var(--color-text-primary);
+}
+
+.card-title{
+    font-family: var(--font-header-pacifico);
+    color: var(--color-chocolate);
+}
+
+.card {
+  transition: 
+    transform 0.3s ease, 
+    box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px); /* se levanta */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card .card-img-top {
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  box-shadow: 0 4px 8px var(--color-chocolate);
+}
+
+.btnBrown {
+    background-color: var(--color-soft-pink);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-chocolate);
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+}
+
+.btnBrown:hover{
+    background-color: var(--color-chocolate);
+    color: var(--color-soft-pink);
+    border-color: var(--color-soft-pink);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* sombra sutil */
+}
+
+.texto-comunidad {
+    font-size: 35px;
+    font-family: var(--font-header-pacifico);
+    color: var(--color-chocolate);
+    margin-bottom: 1.5rem;
+}
+
+.texto-bajo-comunidad{
+    font-family: var(--font-primary-lato); 
+}
