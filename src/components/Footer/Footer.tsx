@@ -1,4 +1,5 @@
 import { IoLogoYoutube, IoLogoFacebook, IoLogoInstagram, IoLogoTwitter, IoLogoLinkedin } from "react-icons/io"
+import "./Footer.css"
 
 
 function Footer(){
