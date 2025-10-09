@@ -1,51 +1,48 @@
-import Swal from "sweetalert2";
+import Swal, { type SweetAlertOptions, type SweetAlertIcon } from "sweetalert2";
 
 /**
- * Muestra un toast en pantalla usando SweetAlert2.
+ * Muestra un toast o alerta en pantalla usando SweetAlert2.
  *
- * @param {string} message - Mensaje a mostrar en el toast.
- * @param {string} [icon="success"] - Tipo de icono que se mostrará. 
- *    Puede ser: "success", "error", "warning", "info" o "question".
- * @param {boolean} [timerProgressBar=true] - Determina si se muestra la barra de progreso del temporizador.
- *
- * @returns {void}
+ * @param message - Mensaje a mostrar.
+ * @param icon - Tipo de icono a mostrar. Valores: `"success" | "error" | "warning" | "info" | "question"`. Por defecto `"success"`.
+ * @param timerProgressBar - Determina si se muestra la barra de progreso del temporizador. Por defecto `true`.
+ * @param isToast - Determina si se muestra como toast (true) o alerta modal (false). Por defecto `true`.
  *
  * @example
- * // Mostrar un toast de éxito por defecto
  * showToastAlert("¡Producto agregado al carrito!");
- *
- * @example
- * // Mostrar un toast de error sin barra de progreso
- * showToastAlert("No se pudo agregar el producto", "error", false);
- *
- * @example
- * // Mostrar un toast de advertencia
- * showToastAlert("Cuidado con esta acción", "warning");
+ * showToastAlert("No se pudo agregar el producto", "error", false, true);
+ * showToastAlert("Este producto está agotado", "info", true, false);
  */
-const showToastAlert = (message, icon = "success", timerProgressBar = true) => {
-    Swal.fire({
-      position: "top-start",
-      icon, // 'success' por defecto, 'error', 'warning', 'info', 'question'
-      title: message,
-      // Prevents the click event from propagating to elements behind the toast
-      didOpen: (toast) => {
-        toast.addEventListener("click", (e) => e.stopPropagation());
-      },
-      customClass: {
-        title: "swal-title-custom",
-        content: "swal-text-custom",
-      },
-      showConfirmButton: false,
-      timer: 1800,
-      timerProgressBar, // true por defecto
-      toast: true,
-      showClass: {
-        popup: `animate__animated animate__fadeInUp animate__faster`,
-      },
-      hideClass: {
-        popup: `animate__animated animate__fadeOutDown animate__faster`,
-      },
-    });
+const showToastAlert = (
+  message: string,
+  icon: SweetAlertIcon = "success",
+  timerProgressBar: boolean = true,
+  isToast: boolean = true
+): void => {
+  const options: SweetAlertOptions = {
+    title: message,
+    icon,
+    toast: isToast,
+    position: isToast ? "top-start" : "center",
+    showConfirmButton: !isToast, // Si es toast, no mostrar botón de confirmación
+    timer: isToast ? 1800 : undefined, // Solo los toasts tienen temporizador
+    timerProgressBar: isToast ? timerProgressBar : undefined,
+    customClass: {
+      title: "swal-title-custom",
+      htmlContainer: "swal-text-custom",
+    },
+    didOpen: (toastElement) => {
+      toastElement.addEventListener("click", (e) => e.stopPropagation());
+    },
+    showClass: {
+      popup: `animate__animated animate__fadeInUp animate__faster`,
+    },
+    hideClass: {
+      popup: `animate__animated animate__fadeOutDown animate__faster`,
+    },
   };
 
-  export default showToastAlert;
+  Swal.fire(options);
+};
+
+export default showToastAlert;
