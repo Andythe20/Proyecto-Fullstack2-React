@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
+import Field from "../../components/Field/Field";
 import "./Contacto.css";
 
 function Contacto() {
@@ -81,8 +81,6 @@ function Contacto() {
     return true;
   };
 
-  //feedback en tiempo real
-
   return (
     <div
       className="container-fluid d-flex justify-content-center py-5"
@@ -103,7 +101,7 @@ function Contacto() {
           id="contactForm"
           noValidate
         >
-          <Input
+          <Field
             className="row mb-3"
             htmlFor="nombre"
             title="Nombre"
@@ -114,40 +112,28 @@ function Contacto() {
             onBlurFunction={validateName}
           />
 
-          <div className="row mb-3">
-            <label htmlFor="correo" className="form-label">
-              Correo
-            </label>
-            <input
-              type="email"
-              id="correo"
-              name="correo"
-              className="form-control"
-              placeholder="Tu correo electrónico"
-              required
-              onBlur={validateEmail}
-            />
-            <div className="invalid-feedback">
-              Ingrese un correo válido (ej: example@gmail.com).
-            </div>
-          </div>
-          <div className="row mb-3">
-            <label htmlFor="mensaje" className="form-label">
-              Mensaje
-            </label>
-            <textarea
-              name="mensaje"
-              id="mensaje"
-              className="form-control"
-              rows={5}
-              placeholder="Ingrese su mensaje"
-              style={{ resize: "none" }}
-              onBlur={validateMessage}
-            ></textarea>
-            <div className="invalid-feedback">
-              El mensaje debe tener entre 10 y 50 caracteres.
-            </div>
-          </div>
+          <Field
+            className="row mb-3"
+            htmlFor="correo"
+            title="Correo Electrónico"
+            id="correo"
+            type="email"
+            txt="Tu correo electrónico"
+            required
+            onBlurFunction={validateEmail}
+          />
+
+          <Field
+            className="row mb-3"
+            htmlFor="mensaje"
+            title="Correo Electrónico"
+            id="mensaje"
+            type="email"
+            as="textarea"
+            txt="Escribe tu mensaje"
+            required
+            onBlurFunction={validateMessage}
+          />
           <div className="row pt-4 mb-3">
             <Button text="Enviar" />
           </div>
