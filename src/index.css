@@ -117,3 +117,13 @@ body h1 {
     transform: translateY(-15px);
 }
 /* PARA EL FOOTER */
+
+/* Para el Toast */
+.swal-title-custom {
+    font-family: var(--font-header-pacifico); 
+    font-size: 60px;
+}
+
+.swal-text-custom {
+    font-family: var(--font-header-pacifico); 
+}
