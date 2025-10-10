@@ -5,5 +5,8 @@ export interface Product {
   descripcion: string;
   precio: number;
   url: string;
-  quantity?: number;
+}
+
+export interface CartProduct extends Product {
+  quantity: number;
 }

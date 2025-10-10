@@ -15,7 +15,7 @@ function CardProduct ({product}: CardProductProps){
   const { addProduct } = useCarrito(); // Usar el hook para obtener la función addProduct
 
   const handleAddToCart = () => {
-    addProduct(product);
+    addProduct({ ...product, quantity: 1 }); // Agregar el producto con cantidad 1
     showToastAlert(`¡${product.nombre} agregado!`);
   }
 
