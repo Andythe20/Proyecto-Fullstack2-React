@@ -1,73 +1,127 @@
-# React + TypeScript + Vite
+# OnlyFlans — Tienda de postres (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+Proyecto frontend de una pequeña tienda de repostería llamada "OnlyFlans". Está construido con React + TypeScript y empaquetado con Vite. Incluye páginas públicas, listado de productos cargado desde un JSON local, un carrito simple persistente en localStorage y notificaciones tipo toast.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Índice
+-- Instalación y ejecución
+-- Scripts disponibles
+-- Rutas y páginas
+-- Funcionalidades principales
+-- Estructura del proyecto (resumen)
+-- Modelo de datos (Product)
+-- Librerías y dependencias
+-- Contrato mínimo (inputs/outputs)
+-- Casos de borde
+-- Sugerencias / próximos pasos
 
-## React Compiler
+## Instalación y ejecución
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+Requisitos: Node.js y npm instalados en tu máquina. (Se recomienda una versión moderna de Node >= 16).
 
-## Expanding the ESLint configuration
+Instalar dependencias y ejecutar en modo desarrollo:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Construir para producción:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Scripts disponibles
+
+Los scripts definidos en `package.json`:
+
+- `dev` — Inicia Vite en modo desarrollo (HMR)
+- `build` — Compila TypeScript y genera la build de Vite
+- `preview` — Sirve la build estática para previsualizar
+- `lint` — Ejecuta ESLint sobre el proyecto
+
+## Rutas y páginas (navegación)
+
+Las rutas están definidas en `src/routes/AppRoutes.tsx` y montadas en `src/main.tsx`:
+
+- `/` → `src/pages/Inicio.tsx` (Inicio)
+- `/nosotros` → `src/pages/Sobre-nosotros/Nosotros.tsx` (Nosotros)
+- `/productos` → `src/pages/Productos/Productos.tsx` (Listado de productos)
+- `/contacto` → `src/pages/Contacto/Contacto.tsx` (Contacto)
+
+El `Navbar` (`src/components/Navbar/Navbar.tsx`) contiene enlaces a estas rutas y el `Footer` está presente en todas las páginas desde `src/main.tsx`.
+
+Nota: Actualmente no hay una ruta dinámica de detalle implementada en React (las tarjetas apuntan a `./detalleProducto.html?cod=...` como referencia), por lo que una mejora recomendable es implementar una ruta `/productos/:codigo` para ver detalle del producto.
+
+## Funcionalidades principales
+
+- Listado de productos cargado desde `public/data/db.json` (se obtiene mediante `fetch('/data/db.json')`).
+- Skeletons de carga (`src/components/ProductSkeleton`) mientras se cargan los productos.
+- Card de producto con imagen, precio formateado y botón "Agregar" (`src/components/CardProduct/CardProduct.tsx`).
+- Carrito global implementado con Context API:
+  - `src/context/CarritoContext.tsx` (contexto)
+  - `src/context/CarritoProvider.tsx` (provee el estado del carrito)
+  - `src/hooks/useCarrito.ts` (hook para consumir el carrito)
+  - El carrito se persiste en `localStorage` bajo la clave `carrito`.
+- Notificaciones tipo toast usando SweetAlert2 (`src/utils/showToastAlert.ts`) al agregar productos.
+- Formateo de moneda con `Intl.NumberFormat` en `src/utils/formatCurrency.ts` (por defecto `es-CL` y `CLP`).
+
+## Estructura del proyecto (resumen)
+
+- `public/`
+  - `data/db.json` — Productos de ejemplo (JSON)
+  - `assets/` — imágenes y fuentes públicas
+- `src/`
+  - `main.tsx` — punto de entrada, router y providers
+  - `routes/AppRoutes.tsx` — rutas de la app
+  - `pages/` — páginas (`Inicio`, `Productos`, `Contacto`, `Sobre-nosotros`, `Login`)
+  - `components/` — componentes reutilizables (Navbar, Footer, CardProduct, Button, ProductSkeleton, etc.)
+  - `context/` — `CarritoContext`, `CarritoProvider`
+  - `hooks/` — `useCarrito`
+  - `types/` — definiciones TypeScript (`product.ts`)
+  - `utils/` — utilidades (`formatCurrency.ts`, `showToastAlert.ts`)
+
+## Modelo de datos (Product)
+
+Definición en `src/types/product.ts`:
+
+```ts
+export interface Product {
+  codigo: string;
+  categoria: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  url: string;
+  quantity?: number; // usado por el carrito
+}
+```
+
+## Librerías y dependencias principales
+
+Dependencias (extras relevantes listadas en `package.json`):
+
+- `react`, `react-dom` — UI
+- `react-router-dom` (v7) — enrutamiento
+- `bootstrap` — estilos y utilidades CSS
+- `react-icons` — iconos SVG
+- `sweetalert2` — notificaciones / toasts
+- `vite` — bundler / dev server
+- `typescript` — tipado estático
+- ESLint y plugins relacionados para linting
+- `@vitejs/plugin-react-swc` (devDependency) — plugin React + SWC para Vite
+
+## Contrato mínimo (inputs / outputs)
+
+- Input principal: `public/data/db.json` (array de `Product`) — fuente de datos para el catálogo.
+- Output principal: UI con listado de productos y estado del carrito persistido en `localStorage`.
+- Errores manejados: si el `fetch` falla, la página de `Productos` muestra un mensaje de error simple.
+
+## Contribuir
+
+1. Haz fork del repositorio
+2. Crea una rama feature: `git checkout -b feat/mi-cambio`
+3. Haz commits claros y crea un PR
