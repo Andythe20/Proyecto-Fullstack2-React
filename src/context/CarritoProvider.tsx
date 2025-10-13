@@ -62,6 +62,7 @@ export const CarritoProvider = ({ children }: CarritoProviderProps) => {
   // Cantidad total de items
   const totalQuantity = items.reduce((sum, p) => sum + (p.quantity || 0), 0);
 
+
   return (
     <CarritoContext.Provider
       value={{ items, totalQuantity, addProduct, removeProduct, clearCart }}

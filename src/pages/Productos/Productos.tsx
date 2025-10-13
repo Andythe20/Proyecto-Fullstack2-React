@@ -1,36 +1,11 @@
-import type { Product } from "../../types/product";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CardProduct from "../../components/CardProduct/CardProduct";
 import ProductSkeleton from "../../components/ProductSkeleton/ProductSkeleton";
+import useProductos from "../../hooks/useProductos";
 import './Productos.css';
 
 function Products() {
-  const [productos, setProductos] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Cargar productos desde JSON o backend con espera simulada
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const response = await fetch("/data/db.json"); // JSON en public/data/db.json
-        if (!response.ok) throw new Error("Error al obtener los productos");
-        const data = await response.json();
-
-        // Simular espera de 2 segundos
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        setProductos(data); // Asumiendo que el JSON tiene un array de productos
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : String(err)); // Manejo básico de errores
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProductos(); // Llamar a la función para cargar productos
-  }, []);
+  const { productos, isLoading, error } = useProductos();
 
   // Render condicional mientras carga o hay error
   if (error) return <p className="text-center mt-5 text-danger">{error}</p>;

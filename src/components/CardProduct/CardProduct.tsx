@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useCarrito } from "../../hooks/useCarrito";
 import type { Product } from "../../types/product";
 import formatCurrency from "../../utils/formatCurrency";
@@ -24,7 +25,7 @@ return (
     <div className="col-12 col-md-6 col-lg-4 d-flex">
       <div className="card mx-auto shadow-sm btnConcavo d-flex flex-column w-100">
         <form className="formulario__producto d-flex flex-column h-100">
-          <a href={`./detalleProducto.html?cod=${product.codigo}`}>
+          <Link to={`/detalleProducto?cod=${product.codigo}`}>
             <img
               src={product.url}
               className="card-img-top shadow"
@@ -33,7 +34,7 @@ return (
               data-bs-placement="top"
               title={`Click para ver detalle de ${product.nombre}`}
             />
-          </a>
+          </Link>
           <div className="card-body d-flex flex-column flex-grow-1 text-center">
             <h5 className="card-title fs-3">{product.nombre}</h5>
             <p className="card-text fs-2 fw-bold producto__precio">
