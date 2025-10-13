@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import type { Product } from "../types/product";
+import type { CartProduct, Product } from "../types/product";
 
 interface CarritoContextProps {
   items: Product[];
   totalQuantity: number;
-  addProduct: (product: Product) => void;
+  addProduct: (product: CartProduct) => void;
   removeProduct: (code: string, qty?: number) => void;
   clearCart: () => void;
 }

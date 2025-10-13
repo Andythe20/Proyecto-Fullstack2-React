@@ -10,13 +10,13 @@ import Footer from "./components/Footer/Footer.tsx";
 import { CarritoProvider } from "./context/CarritoProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+ <StrictMode>
     <CarritoProvider>
       <BrowserRouter>
         <Navbar />
         <AppRoutes />
+        <Footer />
       </BrowserRouter>
-      <Footer/>
     </CarritoProvider>
   </StrictMode>
 );

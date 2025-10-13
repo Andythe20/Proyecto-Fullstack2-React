@@ -1,34 +1,43 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { CarritoContext } from "./CarritoContext";
-import type { Product } from "../types/product";
+import type { CartProduct } from "../types/product";
 
 interface CarritoProviderProps {
   children: ReactNode;
 }
 
 export const CarritoProvider = ({ children }: CarritoProviderProps) => {
-  const [items, setItems] = useState<Product[]>([]);
+  const [items, setItems] = useState<CartProduct[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Cargar desde localStorage
+  // Cargar desde localStorage una sola vez al iniciar
   useEffect(() => {
-    const data = localStorage.getItem("carrito");
-    if (data) setItems(JSON.parse(data));
+    try {
+      const stored = localStorage.getItem("carrito");
+      if (stored) setItems(JSON.parse(stored));
+    } catch (err) {
+      console.error("Error al cargar carrito:", err);
+    } finally {
+      setIsLoaded(true);
+    }
   }, []);
 
-  // Guardar en localStorage
+  // Guardar carrito (solo después de cargar)
   useEffect(() => {
-    localStorage.setItem("carrito", JSON.stringify(items));
-  }, [items]);
+    if (isLoaded) {
+      localStorage.setItem("carrito", JSON.stringify(items));
+    }
+  }, [items, isLoaded]);
 
   // --- Funciones para manipular el carrito --- //
   // Agregar producto
-  const addProduct = (product: Product) => {
+  const addProduct = (product: CartProduct) => {
     setItems((prev) => {
       const existing = prev.find((p) => p.codigo === product.codigo);
       if (existing) {
         return prev.map((p) =>
           p.codigo === product.codigo
-            ? { ...p, quantity: (p.quantity || 1) + (product.quantity || 1) }
+            ? { ...p, quantity: p.quantity + (product.quantity || 1) }
             : p
         );
       }
@@ -41,9 +50,9 @@ export const CarritoProvider = ({ children }: CarritoProviderProps) => {
     setItems((prev) =>
       prev
         .map((p) =>
-          p.codigo === code ? { ...p, quantity: (p.quantity || 1) - qty } : p
+          p.codigo === code ? { ...p, quantity: p.quantity - qty } : p
         )
-        .filter((p) => (p.quantity || 0) > 0)
+        .filter((p) => p.quantity > 0)
     );
   };
 
@@ -53,8 +62,11 @@ export const CarritoProvider = ({ children }: CarritoProviderProps) => {
   // Cantidad total de items
   const totalQuantity = items.reduce((sum, p) => sum + (p.quantity || 0), 0);
 
+
   return (
-    <CarritoContext.Provider value={{ items, totalQuantity, addProduct, removeProduct, clearCart }}>
+    <CarritoContext.Provider
+      value={{ items, totalQuantity, addProduct, removeProduct, clearCart }}
+    >
       {children}
     </CarritoContext.Provider>
   );
