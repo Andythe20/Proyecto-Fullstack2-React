@@ -1,51 +1,52 @@
 @font-face {
-    font-family: 'Lato';
-    src: url('./fonts/Lato/Lato-Regular.ttf')format('woff2');
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-Regular.ttf") format("woff2");
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Pacifico';
-  src: url('./fonts/Pacifico/Pacifico-Regular.ttf') format('woff2');
+  font-family: "Pacifico";
+  src: url("./fonts/Pacifico/Pacifico-Regular.ttf") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 
 @media (max-width: 767.98px) {
-    #logo-container {
-        flex-direction: column !important;
-        text-align: center;
-    }
-    #logo-container img {
-        margin-bottom: 1rem;
-    }
-    #logo-container h1 {
-        font-size: 2rem;
-    }
+  #logo-container {
+    flex-direction: column !important;
+    text-align: center;
+  }
+  #logo-container img {
+    margin-bottom: 1rem;
+  }
+  #logo-container h1 {
+    font-size: 2rem;
+  }
 }
 
-:root{
-    --color-cream-pastel: #FFF5E1; /* Fondo Principal */
-    --color-soft-pink: #FFC0CB; /* Botones y elementos */
-    --color-chocolate: #8B4513; /* Botones y elementos */
-    --color-blanco-roto: #F8F6F4; /* Fondo de tarjetas y elementos secundarios */
-    --color-rosa-pastel: #FDEEEB; /* Fondo de tarjetas y elementos secundarios */
+:root {
+  --color-cream-pastel: #fff5e1; /* Fondo Principal */
+  --color-soft-pink: #ffc0cb; /* Botones y elementos */
+  --color-chocolate: #8b4513; /* Botones y elementos */
+  --color-blanco-roto: #f8f6f4; /* Fondo de tarjetas y elementos secundarios */
+  --color-rosa-pastel: #fdeeeb; /* Fondo de tarjetas y elementos secundarios */
 
-    --color-text-primary: #5D4037;    /* Marrón Oscuro */
-    --color-text-secondary: #B0BEC5;  /* Gris Claro */
+  --color-text-primary: #5d4037; /* Marrón Oscuro */
+  --color-text-secondary: #b0bec5; /* Gris Claro */
 
-    /* Fuentes */
-    --font-primary-lato: 'Lato', sans-serif; /* Texto general */
-    --font-header-pacifico: 'Pacifico', cursive; /* Titulos y encabezados */
+  /* Fuentes */
+  --font-primary-lato: "Lato", sans-serif; /* Texto general */
+  --font-header-pacifico: "Pacifico", cursive; /* Titulos y encabezados */
 }
 
 ::selection {
   background: var(--color-chocolate); /* color de fondo al seleccionar */
-  color: var(--color-soft-pink);      /* color del texto seleccionado */
+  color: var(--color-soft-pink); /* color del texto seleccionado */
 }
 
-::-moz-selection { /* Para Firefox */
+::-moz-selection {
+  /* Para Firefox */
   background: var(--color-chocolate);
   color: var(--color-soft-pink);
 }
@@ -59,18 +60,17 @@ a:hover {
   color: #535bf2;
 }
 
-body{
-    background-color: var(--color-cream-pastel);
-    font-family: var(--font-header-pacifico), cursive;
-    padding-top: 70px;
+body {
+  background-color: var(--color-cream-pastel);
+  font-family: var(--font-header-pacifico), cursive;
+  padding-top: 70px;
 }
 
 body h1 {
-    font-family: var(--font-header-pacifico);
-    color: var(--color-text-primary);
-    margin: 30px;
+  font-family: var(--font-header-pacifico);
+  color: var(--color-text-primary);
+  margin: 30px;
 }
-
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -87,10 +87,26 @@ body h1 {
 
 /* Para el Toast */
 .swal-title-custom {
-    font-family: var(--font-header-pacifico); 
-    font-size: 60px;
+  font-family: var(--font-header-pacifico);
+  /*font-size: 24px;*/
 }
 
 .swal-text-custom {
-    font-family: var(--font-header-pacifico); 
+  font-family: var(--font-header-pacifico);
+}
+
+.swal-btn-custom {
+  background-color: var(--color-soft-pink);
+  font-family: var(--font-header-pacifico), sans-serif;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-chocolate);
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.swal-btn-custom:hover {
+  background-color: var(--color-chocolate);
+  color: var(--color-soft-pink);
+  border-color: var(--color-soft-pink);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* sombra sutil */
 }
