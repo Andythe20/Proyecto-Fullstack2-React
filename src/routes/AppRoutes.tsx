@@ -5,6 +5,7 @@ import Inicio from "../pages/Inicio";
 import Nosotros from "../pages/Sobre-nosotros/Nosotros.tsx";
 import Productos from "../pages/Productos/Productos.tsx";
 import DetalleProducto from "../pages/DetalleProducto/DetalleProducto.tsx";
+import CarritoPage from "../pages/CarritoPage/CarritoPage.tsx";
 
 function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ function AppRoutes() {
         <Route path="/productos" element={<Productos />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/detalleProducto" element={<DetalleProducto />} />
+        <Route path="/carrito" element={<CarritoPage />} />
       </Routes>
     </>
   );

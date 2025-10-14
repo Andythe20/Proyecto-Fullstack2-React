@@ -1,0 +1,108 @@
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid var(--color-text-primary);
+    background-color: white;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background-color: var(--color-text-primary);
+    color: white;
+}
+
+.quantity-display {
+    min-width: 40px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.table {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px var(--color-chocolate);
+}
+
+.table thead th {
+    background-color: var(--color-text-primary);
+    color: white;
+    border: none;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.carrito__parrafo {
+    color: #6c757d;
+    font-family: var(--color-chocolate);
+}
+
+.empty-cart i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.total-section {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px var(--color-chocolate);
+    margin-top: 20px;
+}
+
+.section-title {
+    color: var(--color-text-primary);
+    font-weight: bold;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--color-chocolate);
+}
+
+.product-price {
+    color: var(--color-text-primary);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.btn-danger-outline {
+    color: #dc3545;
+    border-color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-danger-outline:hover {
+    background-color: #dc3545;
+    color: white;
+}
