@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { CarritoContext } from "./CarritoContext";
-import type { CartProduct } from "../types/product";
+import type { CartProduct, Product } from "../types/product";
 
 interface CarritoProviderProps {
   children: ReactNode;
@@ -31,17 +31,23 @@ export const CarritoProvider = ({ children }: CarritoProviderProps) => {
 
   // --- Funciones para manipular el carrito --- //
   // Agregar producto
-  const addProduct = (product: CartProduct) => {
+  const addProduct = (product: CartProduct | Product) => {
+    // Normalizar a CartProduct (asegurar quantity)
+    const cartProduct: CartProduct = {
+      ...product,
+      quantity: (product as any).quantity ?? 1,
+    };
+
     setItems((prev) => {
-      const existing = prev.find((p) => p.codigo === product.codigo);
+      const existing = prev.find((p) => p.codigo === cartProduct.codigo);
       if (existing) {
         return prev.map((p) =>
-          p.codigo === product.codigo
-            ? { ...p, quantity: p.quantity + (product.quantity || 1) }
+          p.codigo === cartProduct.codigo
+            ? { ...p, quantity: p.quantity + (cartProduct.quantity || 1) }
             : p
         );
       }
-      return [...prev, { ...product, quantity: product.quantity || 1 }];
+      return [...prev, cartProduct];
     });
   };
 
