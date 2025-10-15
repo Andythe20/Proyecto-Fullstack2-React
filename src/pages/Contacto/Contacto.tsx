@@ -1,84 +1,152 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 import Button from "../../components/Button/Button";
 import Field from "../../components/Field/Field";
 import "./Contacto.css";
 
 function Contacto() {
-  const setOk = (element: HTMLElement) => {
-    element.classList.remove("is-invalid");
-    element.classList.add("is-valid");
-  };
+  // Estado para los valores de los campos
+  const [values, setValues] = useState({
+    nombre: "",
+    correo: "",
+    mensaje: "",
+  });
 
-  const setErrorElement = (element: HTMLElement, msg: string) => {
-    element.classList.remove("is-valid");
-    element.classList.add("is-invalid");
+  // Estado para los errores de validación
+  const [errors, setErrors] = useState({
+    nombre: "",
+    correo: "",
+    mensaje: "",
+  });
 
-    const fb = element.parentElement?.querySelector(".invalid-feedback");
-
-    if (fb && msg) fb.textContent = msg;
-  };
-
-  const validateName = () => {
-    const nombre = document.getElementById("nombre") as HTMLInputElement | null;
-    if (!nombre) return false;
-    const name = nombre.value.trim();
-    if (name.length < 3) {
-      setErrorElement(nombre, "El nombre debe tener al menos 3 carácteres");
-      return false;
+  // Validar un solo campo en tiempo real
+  const validateField = (field: string, value: string) => {
+    let error = "";
+    if (field === "nombre" && value.trim().length < 3) {
+      error = "El nombre debe tener al menos 3 carácteres";
     }
-    setOk(nombre);
-    return true;
+    if (field === "correo") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const allowedDomains = [
+        "gmail.com",
+        "hotmail.com",
+        "yahoo.com",
+        "outlook.com",
+        "icloud.com",
+        "protonmail.com",
+        "mailbox.org",
+        "zoho.com",
+        "hubspot.com",
+        "tutanota.com",
+        "posteo.net",
+        "thexyz.com",
+      ];
+      if (!emailRegex.test(value.trim())) {
+        error = "Ingrese un correo válido (ej: example@gmail.com).";
+      } else {
+        const dominio = value.trim().split("@")[1].toLowerCase();
+        if (!allowedDomains.includes(dominio)) {
+          error = "El dominio del correo no es válido.";
+        }
+      }
+    }
+    if (field === "mensaje") {
+      if (value.trim().length < 10) {
+        error = "El mensaje debe tener más de 10 carácteres.";
+      } else if (value.trim().length > 50) {
+        error = "El mensaje debe tener menos de 50 carácteres.";
+      }
+    }
+    setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
-  const validateEmail = () => {
-    const correo = document.getElementById("correo") as HTMLInputElement | null;
-    if (!correo) return false;
+  // Maneja el cambio de cualquier campo y valida en tiempo real
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> // evento ChangeEvent que genera React cuando detecta un cambio
+  ) => {
+    const { id, value } = e.target; // destructura el id y value del campo que genero el evento
+
+    setValues((prev) => ({
+      // prev es el estado anterior
+      ...prev,
+      [id]: value, // actualiza el campo que genero el evento
+    }));
+
+    //validar en tiempo real
+    validateField(id, value);
+  };
+
+  // Validación completa al enviar
+  const validate = () => {
+    let valid = true;
+    let newErrors = { nombre: "", correo: "", mensaje: "" };
+
+    if (values.nombre.trim().length < 3) {
+      newErrors.nombre = "El nombre debe tener al menos 3 carácteres";
+      valid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const allowedDomains = [
       "gmail.com",
       "hotmail.com",
       "yahoo.com",
       "outlook.com",
       "icloud.com",
+      "protonmail.com",
+      "mailbox.org",
+      "zoho.com",
+      "hubspot.com",
+      "tutanota.com",
+      "posteo.net",
+      "thexyz.com",
     ];
-    const emailTrimed = correo.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailTrimed)) {
-      setErrorElement(
-        correo,
-        "Ingrese un correo válido (ej: example@gmail.com)."
-      );
-      return false;
+
+    if (!emailRegex.test(values.correo.trim())) {
+      newErrors.correo = "Ingrese un correo válido (ej: example@gmail.com).";
+      valid = false;
+    } else {
+      const dominio = values.correo.trim().split("@")[1];
+      if (!allowedDomains.includes(dominio)) {
+        newErrors.correo = "El dominio del correo no es válido.";
+        valid = false;
+      }
     }
 
-    const dominio = emailTrimed.split("@")[1];
-    if (!allowedDomains.includes(dominio)) {
-      setErrorElement(correo, "El dominio del correo no es válido.");
-      return false;
+    if (values.mensaje.trim().length < 10) {
+      newErrors.mensaje = "El mensaje debe tener más de 10 carácteres.";
+      valid = false;
+    } else if (values.mensaje.trim().length > 50) {
+      newErrors.mensaje = "El mensaje debe tener menos de 50 carácteres.";
+      valid = false;
     }
-    setOk(correo);
-    return true;
+
+    setErrors(newErrors);
+    return valid;
   };
 
-  const validateMessage = () => {
-    const mensaje = document.getElementById(
-      "mensaje"
-    ) as HTMLTextAreaElement | null;
-    if (!mensaje) return false;
-
-    const v = mensaje.value.trim();
-
-    if (v.length < 10) {
-      setErrorElement(mensaje, "El mensaje debe tener más de 10 carácteres.");
-      return false;
+  // Maneja el envío del formulario
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      Swal.fire({
+        title: "¡Formulario enviado!",
+        text: "Tu mensaje fue enviado correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+      });
+      // limpiar los campos
+      setValues({ nombre: "", correo: "", mensaje: "" });
+      setErrors({ nombre: "", correo: "", mensaje: "" });
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: "Por favor corrige los errores en el formulario.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
     }
-
-    if (v.length > 50) {
-      setErrorElement(mensaje, "El mensaje debe tener menos de 50 carácteres.");
-      return false;
-    }
-
-    setOk(mensaje);
-    return true;
   };
 
   return (
@@ -92,50 +160,50 @@ function Contacto() {
         <p className="text-center">
           Déjanos tus datos y nos pondremos en contacto
         </p>
-        {/* contenedor para alertas */}
-        <div id="alerta" className="mb-3"></div>
         <form
           className="mx-2"
-          action="#"
-          method="post"
           id="contactForm"
+          onSubmit={handleSubmit}
           noValidate
         >
           <Field
             className="row mb-3"
-            htmlFor="nombre"
             title="Nombre"
             id="nombre"
             type="text"
             txt="Tu nombre"
             required
-            onBlurFunction={validateName}
+            value={values.nombre}
+            onChange={handleChange}
+            error={errors.nombre}
           />
 
           <Field
             className="row mb-3"
-            htmlFor="correo"
             title="Correo Electrónico"
             id="correo"
             type="email"
             txt="Tu correo electrónico"
             required
-            onBlurFunction={validateEmail}
+            value={values.correo}
+            onChange={handleChange}
+            error={errors.correo}
           />
 
           <Field
             className="row mb-3"
-            htmlFor="mensaje"
-            title="Correo Electrónico"
+            title="Mensaje"
             id="mensaje"
-            type="email"
+            type="text"
             as="textarea"
             txt="Escribe tu mensaje"
             required
-            onBlurFunction={validateMessage}
+            value={values.mensaje}
+            onChange={handleChange}
+            error={errors.mensaje}
           />
           <div className="row pt-4 mb-3">
-            <Button text="Enviar" />
+            <Button text="Enviar" type="submit" />
           </div>
         </form>
       </div>

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Contacto from "../pages/Contacto/Contacto";
-import Inicio from "../pages/Inicio";
+import Inicio from "../pages/Inicio/Inicio.tsx";
 import Nosotros from "../pages/Sobre-nosotros/Nosotros.tsx";
 import Productos from "../pages/Productos/Productos.tsx";
 import DetalleProducto from "../pages/DetalleProducto/DetalleProducto.tsx";
