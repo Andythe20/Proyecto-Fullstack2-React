@@ -30,6 +30,7 @@ const showToastAlert = (
     customClass: {
       title: "swal-title-custom",
       htmlContainer: "swal-text-custom",
+      confirmButton: "swal-btn-custom",
     },
     didOpen: (toastElement) => {
       toastElement.addEventListener("click", (e) => e.stopPropagation());
