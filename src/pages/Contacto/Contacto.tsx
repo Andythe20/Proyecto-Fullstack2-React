@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import Button from "../../components/Button/Button";
 import Field from "../../components/Field/Field";
 import "./Contacto.css";
+import showToastAlert from "../../utils/showToastAlert";
 
 function Contacto() {
   // Estado para los valores de los campos
@@ -80,7 +81,7 @@ function Contacto() {
   // Validación completa al enviar
   const validate = () => {
     let valid = true;
-    let newErrors = { nombre: "", correo: "", mensaje: "" };
+    const newErrors = { nombre: "", correo: "", mensaje: "" };
 
     if (values.nombre.trim().length < 3) {
       newErrors.nombre = "El nombre debe tener al menos 3 carácteres";
@@ -130,22 +131,26 @@ function Contacto() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      Swal.fire({
+      /*Swal.fire({
         title: "¡Formulario enviado!",
         text: "Tu mensaje fue enviado correctamente.",
         icon: "success",
         confirmButtonText: "Aceptar",
-      });
+        
+      });*/
+      showToastAlert("Tu mensaje fue enviado correctamente.", "success", false, false);
       // limpiar los campos
       setValues({ nombre: "", correo: "", mensaje: "" });
       setErrors({ nombre: "", correo: "", mensaje: "" });
     } else {
-      Swal.fire({
+      /*Swal.fire({
         title: "Error",
         text: "Por favor corrige los errores en el formulario.",
         icon: "error",
         confirmButtonText: "Aceptar",
       });
+      */
+     showToastAlert("Por favor corrige los errores en el formulario.", "error", false, false);
     }
   };
 
