@@ -1,6 +1,7 @@
 import "./Button.css";
 
 interface ButtonProps {
+  id: string;
   text: string;
   onClick?: () => void;
   className?: string;
@@ -9,6 +10,7 @@ interface ButtonProps {
 }
 
 function Button({
+  id,
   text,
   onClick,
   className = "btn btnBrown mt-auto fs-5",
@@ -16,7 +18,7 @@ function Button({
   type = "button",
 }: ButtonProps) {
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button type={type} className={className} onClick={onClick} id={id}>
       {icon && <i className={`${icon} me-2`}></i>}
       {text}
     </button>
