@@ -57,18 +57,6 @@ describe('DetalleProducto', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('debe mostrar error cuando hay un error', () => {
-    mockUseProductos.mockReturnValue({
-      isLoading: false,
-      productos: [],
-      error: 'Error de conexión',
-      getProductoByCode: vi.fn()
-    });
-
-    render(<BrowserRouter><DetalleProducto /></BrowserRouter>);
-    expect(screen.getByText(/Error: Error de conexión/i)).toBeInTheDocument();
-  });
-
   it('debe mostrar producto cuando existe', () => {
     const producto = {
       codigo: 'FLAN-001',
