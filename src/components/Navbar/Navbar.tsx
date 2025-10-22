@@ -111,7 +111,7 @@ function Navbar() {
             */}
 
           {/* Icono del carrito con cantidad de productos */}
-          <Link className="nav-link position-relative d-flex align-items-center" to="/carrito">
+          <Link className="nav-link position-relative d-flex align-items-center me-3" to="/carrito">
             <div className="position-relative d-inline-block">
               <IoCartOutline
                 style={{ fontSize: '1.8rem', verticalAlign: 'middle' }}
