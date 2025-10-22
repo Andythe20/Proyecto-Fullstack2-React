@@ -1,10 +1,14 @@
+import { Link } from "react-router-dom";
+import "./Login.css"
+import OnlyFlans_logo from "../../assets/Imagenes/OnlyFlans_logo.png"
+
 const Login = () => {
   return (
     <div className="container" style={{ marginTop: "-70px" }}>
       <div className="login-container">
         <div className="rounded p-2 d-flex justify-content-center">
           <img
-            src="../assets/img/OnlyFlans_logo.png"
+            src={OnlyFlans_logo}
             className="img-fluid rounded-5 shadow"
             style={{ maxWidth: "200px; max-height: 200px" }}
           />
@@ -14,11 +18,11 @@ const Login = () => {
         <h1 className="login-title py-4">Iniciar Sesión</h1>
 
         <form className="needs-validation" noValidate>
-          <Input
+          <input
             type="email"
             className="mb-3"
             title="Correo Electrónico"
-            txt="nombre@dominio.com"
+            placeholder="nombre@dominio.com"
             required
           />
           <div className="mb-3">
@@ -64,14 +68,14 @@ const Login = () => {
             Ingresar
           </button>
           <div className="text-center mt-3">
-            <a href="../forgotPassword/forgotPassword.html">
+            <Link to="/forgotPassword">
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
           <div className="text-center mt-3">
             <p>
               ¿No tienes cuenta?
-              <a href="../register/register.html">Regístrate</a>
+              <Link to="/register">Regístrate</Link>
             </p>
           </div>
         </form>
@@ -79,3 +83,5 @@ const Login = () => {
     </div>
   );
 };
+
+export default Login
