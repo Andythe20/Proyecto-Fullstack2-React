@@ -1,8 +1,12 @@
 # OnlyFlans — Tienda de postres (React + TypeScript + Vite)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8fc0eee7-95a9-47fa-82bc-1cba00041bac/deploy-status)](https://app.netlify.com/sites/onlyflans2/overview)
 ---
 
 Proyecto frontend de una pequeña tienda de repostería llamada "OnlyFlans". Está construido con React + TypeScript y empaquetado con Vite. Incluye páginas públicas, listado de productos cargado desde un JSON local, un carrito simple persistente en localStorage y notificaciones tipo toast.
+
+## 🌐 Demo en vivo
+**Puedes ver la aplicación funcionando aquí:** [https://onlyflans2.netlify.app](https://onlyflans2.netlify.app)
 
 Índice
 -- Instalación y ejecución
