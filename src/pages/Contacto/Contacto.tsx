@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import Button from "../../components/Button/Button";
 import Field from "../../components/Field/Field";
 import "./Contacto.css";
@@ -131,26 +130,22 @@ function Contacto() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      /*Swal.fire({
-        title: "¡Formulario enviado!",
-        text: "Tu mensaje fue enviado correctamente.",
-        icon: "success",
-        confirmButtonText: "Aceptar",
-        
-      });*/
-      showToastAlert("Tu mensaje fue enviado correctamente.", "success", false, false);
+      showToastAlert(
+        "Tu mensaje fue enviado correctamente.",
+        "success",
+        false,
+        false
+      );
       // limpiar los campos
       setValues({ nombre: "", correo: "", mensaje: "" });
       setErrors({ nombre: "", correo: "", mensaje: "" });
     } else {
-      /*Swal.fire({
-        title: "Error",
-        text: "Por favor corrige los errores en el formulario.",
-        icon: "error",
-        confirmButtonText: "Aceptar",
-      });
-      */
-     showToastAlert("Por favor corrige los errores en el formulario.", "error", false, false);
+      showToastAlert(
+        "Por favor corrige los errores en el formulario.",
+        "error",
+        false,
+        false
+      );
     }
   };
 
@@ -173,10 +168,10 @@ function Contacto() {
         >
           <Field
             className="row mb-3"
-            title="Nombre"
+            titleText="Nombre"
             id="nombre"
             type="text"
-            txt="Tu nombre"
+            placeholder="Tu nombre"
             required
             value={values.nombre}
             onChange={handleChange}
@@ -185,10 +180,10 @@ function Contacto() {
 
           <Field
             className="row mb-3"
-            title="Correo Electrónico"
+            titleText="Correo Electrónico"
             id="correo"
             type="email"
-            txt="Tu correo electrónico"
+            placeholder="Tu correo electrónico"
             required
             value={values.correo}
             onChange={handleChange}
@@ -197,18 +192,18 @@ function Contacto() {
 
           <Field
             className="row mb-3"
-            title="Mensaje"
+            titleText="Mensaje"
             id="mensaje"
             type="text"
             as="textarea"
-            txt="Escribe tu mensaje"
+            placeholder="Escribe tu mensaje"
             required
             value={values.mensaje}
             onChange={handleChange}
             error={errors.mensaje}
           />
           <div className="row pt-4 mb-3">
-            <Button text="Enviar" type="submit" />
+            <Button id="contact-button" text="Enviar" type="submit" />
           </div>
         </form>
       </div>
