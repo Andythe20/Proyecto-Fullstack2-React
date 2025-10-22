@@ -92,8 +92,8 @@ const Login = () => {
         <div className="rounded p-2 d-flex justify-content-center">
           <img
             src={OnlyFlans_logo}
-            className="img-fluid rounded-5 shadow"
-            style={{ maxWidth: "200px; max-height: 200px" }}
+            className="logo-container img-fluid rounded-5 shadow"
+            style={{ maxWidth: "200px;", maxHeight: "200px" }}
           />
         </div>
 

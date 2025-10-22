@@ -1,7 +1,7 @@
 interface FieldProps {
   titleText: string;
   className: string;
-  placeholder: string;
+  placeholder?: string;
   required?: boolean;
   id: string;
   type?: string;
