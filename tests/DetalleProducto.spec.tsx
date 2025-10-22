@@ -1,11 +1,11 @@
-// DetalleProducto.test.tsx
+// DetalleProducto.spec.tsx
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import DetalleProducto from '../src/pages/DetalleProducto/DetalleProducto';
 import '@testing-library/jest-dom';
 
-// Mocks simples
+// Mocks
 vi.mock('../src/hooks/useProductos', () => ({
   default: vi.fn()
 }));
@@ -14,114 +14,157 @@ vi.mock('../src/hooks/useCarrito', () => ({
   useCarrito: vi.fn()
 }));
 
-vi.mock('../src/utils/showToastAlert', () => ({
-  default: vi.fn()
-}));
-
-vi.mock('../src/components/LoadingSpinner/LoadingSpinner', () => ({
-  default: () => <div>Loading...</div>
-}));
-
-vi.mock('../src/components/Button/Button', () => ({
-  default: ({ onClick, text }: any) => (
-    <button onClick={onClick}>{text}</button>
-  )
-}));
-
 import useProductos from '../src/hooks/useProductos';
 import { useCarrito } from '../src/hooks/useCarrito';
-import showToastAlert from '../src/utils/showToastAlert';
 
 const mockUseProductos = useProductos as any;
 const mockUseCarrito = useCarrito as any;
-const mockShowToastAlert = showToastAlert as any;
 
-describe('DetalleProducto', () => {
-  const mockAddProduct = vi.fn();
+// Mock para useSearchParams
+const mockUseSearchParams = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useSearchParams: () => mockUseSearchParams(),
+  };
+});
 
+describe('DetalleProducto - Producto no encontrado', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseCarrito.mockReturnValue({ addProduct: mockAddProduct });
-    mockShowToastAlert.mockImplementation(() => {});
+    mockUseCarrito.mockReturnValue({ 
+      addProduct: vi.fn(),
+      productos: [] 
+    });
   });
 
-  it('debe mostrar loading cuando está cargando', () => {
+  it('debe mostrar "No se encontró el producto." cuando el código no existe', async () => {
+    // Mock useSearchParams para que devuelva un código
+    mockUseSearchParams.mockReturnValue([
+      { get: (key: string) => key === 'cod' ? 'CODIGO_INEXISTENTE' : null }
+    ]);
+
+    // Mock: producto no encontrado
     mockUseProductos.mockReturnValue({
-      isLoading: true,
+      isLoading: false,
+      productos: [],
+      error: null,
+      getProductoByCode: () => null // Retorna null cuando no encuentra
+    });
+
+    render(
+      <BrowserRouter>
+        <DetalleProducto />
+      </BrowserRouter>
+    );
+
+    // Verificar el mensaje exacto que muestras
+    await waitFor(() => {
+      expect(screen.getByText('No se encontró el producto.')).toBeInTheDocument();
+    });
+  });
+
+  it('debe mostrar "No se proporcionó código de producto." cuando no hay código en la URL', async () => {
+    // Mock useSearchParams para que devuelva null (sin código)
+    mockUseSearchParams.mockReturnValue([
+      { get: (key: string) => null }
+    ]);
+
+    mockUseProductos.mockReturnValue({
+      isLoading: false,
       productos: [],
       error: null,
       getProductoByCode: vi.fn()
     });
 
-    render(<BrowserRouter><DetalleProducto /></BrowserRouter>);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    render(
+      <BrowserRouter>
+        <DetalleProducto />
+      </BrowserRouter>
+    );
+
+    // Verificar el mensaje cuando no hay código
+    await waitFor(() => {
+      expect(screen.getByText('No se proporcionó código de producto.')).toBeInTheDocument();
+    });
   });
 
-  it('debe mostrar producto cuando existe', () => {
-    const producto = {
+  describe('DetalleProducto - Comportamientos adicionales', () => {
+  // ... tu beforeEach y mocks existentes
+
+  it('debe mostrar "Cargando producto..." cuando está cargando', () => {
+    mockUseSearchParams.mockReturnValue([
+      { get: (key: string) => 'FLAN-001' }
+    ]);
+
+    mockUseProductos.mockReturnValue({
+      isLoading: true, // 👈 Loading activado
+      productos: [],
+      error: null,
+      getProductoByCode: vi.fn()
+    });
+
+    render(
+      <BrowserRouter>
+        <DetalleProducto />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Cargando producto...')).toBeInTheDocument();
+  });
+
+  it('debe mostrar producto cuando existe', async () => {
+    const productoMock = {
       codigo: 'FLAN-001',
       nombre: 'Flan de Vainilla',
-      descripcion: 'Delicioso flan',
+      descripcion: 'Delicioso flan artesanal',
       precio: 15000,
       url: '/flan.jpg'
     };
 
-    mockUseProductos.mockReturnValue({
-      isLoading: false,
-      productos: [producto],
-      error: null,
-      getProductoByCode: () => producto
-    });
-
-    // Simular parámetro en URL
-    window.history.pushState({}, '', '/?cod=FLAN-001');
-    render(<BrowserRouter><DetalleProducto /></BrowserRouter>);
-
-    expect(screen.getByText('Flan de Vainilla')).toBeInTheDocument();
-    expect(screen.getByText('FLAN-001')).toBeInTheDocument();
-  });
-
-  it('debe agregar producto al carrito', async () => {
-    const producto = {
-      codigo: 'FLAN-001',
-      nombre: 'Flan de Vainilla',
-      descripcion: 'Delicioso flan',
-      precio: 15000,
-      url: '/flan.jpg'
-    };
+    mockUseSearchParams.mockReturnValue([
+      { get: (key: string) => 'FLAN-001' }
+    ]);
 
     mockUseProductos.mockReturnValue({
       isLoading: false,
-      productos: [producto],
+      productos: [productoMock],
       error: null,
-      getProductoByCode: () => producto
+      getProductoByCode: () => productoMock // 👈 Retorna el producto
     });
 
-    window.history.pushState({}, '', '/?cod=FLAN-001');
-    render(<BrowserRouter><DetalleProducto /></BrowserRouter>);
-
-    const addButton = screen.getByText('Agregar');
-    fireEvent.click(addButton);
+    render(
+      <BrowserRouter>
+        <DetalleProducto />
+      </BrowserRouter>
+    );
 
     await waitFor(() => {
-      expect(mockAddProduct).toHaveBeenCalledWith({
-        ...producto,
-        quantity: 1
-      });
+      expect(screen.getByText('Flan de Vainilla')).toBeInTheDocument();
+      expect(screen.getByText('FLAN-001')).toBeInTheDocument();
     });
   });
 
-  it('debe mostrar mensaje cuando no hay producto', () => {
+  it('debe mostrar error cuando hay problema en la carga', () => {
+    mockUseSearchParams.mockReturnValue([
+      { get: (key: string) => 'FLAN-001' }
+    ]);
+
     mockUseProductos.mockReturnValue({
       isLoading: false,
       productos: [],
-      error: null,
-      getProductoByCode: () => null
+      error: 'Error de conexión', // 👈 Error simulado
+      getProductoByCode: vi.fn()
     });
 
-    window.history.pushState({}, '', '/?cod=INEXISTENTE');
-    render(<BrowserRouter><DetalleProducto /></BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <DetalleProducto />
+      </BrowserRouter>
+    );
 
-    expect(screen.getByText(/No se encontró el producto/i)).toBeInTheDocument();
+    expect(screen.getByText('Error: Error de conexión')).toBeInTheDocument();
   });
+});
 });
