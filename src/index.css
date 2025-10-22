@@ -1,13 +1,13 @@
 @font-face {
   font-family: "Lato";
-  src: url("./fonts/Lato/Lato-Regular.ttf") format("woff2");
+  src: url("./assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Pacifico";
-  src: url("./fonts/Pacifico/Pacifico-Regular.ttf") format("woff2");
+  src: url("./assets/fonts/Pacifico/Pacifico-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
