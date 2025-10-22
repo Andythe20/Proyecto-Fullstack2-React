@@ -6,6 +6,7 @@ import Nosotros from "../pages/Sobre-nosotros/Nosotros.tsx";
 import Productos from "../pages/Productos/Productos.tsx";
 import DetalleProducto from "../pages/DetalleProducto/DetalleProducto.tsx";
 import CarritoPage from "../pages/CarritoPage/CarritoPage.tsx";
+import { NotFound } from "../pages/NotFound/NotFound.tsx";
 import Login from "../pages/Login/Login.tsx";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword.tsx";
 import Register from "../pages/Register/Register.tsx";
@@ -23,6 +24,7 @@ function AppRoutes() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/forgotPassword" element={<ForgotPassword/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

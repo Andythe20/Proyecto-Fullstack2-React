@@ -1,11 +1,13 @@
 # OnlyFlans — Tienda de postres (React + TypeScript + Vite)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/8fc0eee7-95a9-47fa-82bc-1cba00041bac/deploy-status)](https://app.netlify.com/sites/onlyflans2/overview)
+
 ---
 
 Proyecto frontend de una pequeña tienda de repostería llamada "OnlyFlans". Está construido con React + TypeScript y empaquetado con Vite. Incluye páginas públicas, listado de productos cargado desde un JSON local, un carrito simple persistente en localStorage y notificaciones tipo toast.
 
 ## 🌐 Demo en vivo
+
 **Puedes ver la aplicación funcionando aquí:** [https://onlyflans2.netlify.app](https://onlyflans2.netlify.app)
 
 Índice
@@ -123,6 +125,28 @@ Dependencias (extras relevantes listadas en `package.json`):
 - Input principal: `public/data/db.json` (array de `Product`) — fuente de datos para el catálogo.
 - Output principal: UI con listado de productos y estado del carrito persistido en `localStorage`.
 - Errores manejados: si el `fetch` falla, la página de `Productos` muestra un mensaje de error simple.
+
+## Tests
+
+El proyecto incluye tests usando Vitest y React Testing Library. Los tests se encuentran en la carpeta `tests/` y usan `@testing-library/jest-dom` para aserciones.
+
+Para ejecutar los tests (si Vitest no está instalado globalmente, instala primero las dependencias):
+
+```bash
+npm install
+npx vitest --run
+```
+
+Nota: sería conveniente añadir un script `test` en `package.json` para ejecutar `vitest` más fácilmente:
+
+```json
+"scripts": {
+  "test": "vitest"
+}
+```
+
+- Persistencia en `localStorage`:
+  - `CarritoProvider` persiste el carrito en `localStorage` con la clave `carrito`. Recomiendo validar y parsear el JSON antes de usarlo para evitar crashes por datos corruptos.
 
 ## Contribuir
 

@@ -10,9 +10,9 @@ on:
 jobs:
     deploy:
         if: |
-            github.repository == 'Andythe20/Proyecto-Fullstack2-React' &&
-            (github.event_name == 'push' || 
-            (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+          github.repository == 'Andythe20/Proyecto-Fullstack2-React' &&
+          (github.event_name == 'push' || 
+          (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
 
         runs-on: ubuntu-latest
 
