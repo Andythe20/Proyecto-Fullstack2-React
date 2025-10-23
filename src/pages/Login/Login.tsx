@@ -5,17 +5,24 @@ import Field from "../../components/Field/Field";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import type { User } from "../../types/user";
+
+type StoredUser = {
+  email?: string;
+  correo?: string;
+  password?: string;
+  contrasenna?: string;
+  [key: string]: unknown;
+};
 
 const Login = () => {
   const { login } = useAuth();
 
-  // Estado para los valores de los campos
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
 
-  // Estado para los errores de validación
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -23,22 +30,20 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // Maneja cambios en los campos
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { id, value } = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
+    const { id, value } = target;
     setValues((prev) => ({ ...prev, [id]: value }));
     setErrors((prev) => ({ ...prev, [id]: "" }));
   };
 
-  // Maneja envío del formulario y valida contra Local Storage
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones simples de presencia
+    // Validaciones básicas
     const newErrors = { email: "", password: "" };
-
     if (!values.email) newErrors.email = "El correo es requerido";
     if (!values.password) newErrors.password = "La contraseña es requerida";
     if (newErrors.email || newErrors.password) {
@@ -46,46 +51,100 @@ const Login = () => {
       return;
     }
 
-    // Intentar leer credenciales del Local Storage
-    let storedEmail: string | null = null;
-    let storedPassword: string | null = null;
-
-    const rawUser = localStorage.getItem("user"); // posible almacenamiento como objeto JSON
-    if (rawUser) {
-      try {
-        const userObj = JSON.parse(rawUser);
-        storedEmail = userObj.email ?? null;
-        storedPassword = userObj.password ?? null;
-      } catch {
-        // si no es JSON, ignorar
-      }
-    }
-
-    // Si no vino como objeto, buscar claves individuales
-    if (!storedEmail) storedEmail = localStorage.getItem("email");
-    if (!storedPassword) storedPassword = localStorage.getItem("password");
-
-    if (!storedEmail || !storedPassword) {
+    // Intentar leer usuario desde las posibles claves en localStorage
+    const rawUser =
+      localStorage.getItem("user") ?? localStorage.getItem("registeredUser");
+    if (!rawUser) {
       setErrors({
-        email: "No hay usuario registrado en Local Storage",
+        email: "No hay usuario registrado",
         password: "",
       });
       return;
     }
 
-    // Comparar credenciales
-    if (
-      values.email.trim().toLowerCase() === storedEmail.trim().toLowerCase() &&
-      values.password === storedPassword
-    ) {
-      // Login exitoso: marcar sesión y redirigir
-      // Ejemplo mejorado para el login
-      login({
-        email: storedEmail, //guardar usuario con email y password
-        password: storedPassword,
-      });
+    // Intentar parsear JSON; si falla, intentar claves individuales
+    let storedUser: StoredUser | null = null;
+    try {
+      storedUser = JSON.parse(rawUser) as StoredUser;
+    } catch {
+      // Fallback: claves separadas en localStorage (legacy)
+      const storedEmail =
+        localStorage.getItem("email") ?? localStorage.getItem("correo");
+      const storedPassword =
+        localStorage.getItem("password") ?? localStorage.getItem("contrasenna");
+      if (!storedEmail || !storedPassword) {
+        setErrors({
+          email: "No hay usuario registrado",
+          password: "",
+        });
+        return;
+      }
+      if (
+        values.email.trim().toLowerCase() ===
+          storedEmail.trim().toLowerCase() &&
+        values.password === storedPassword
+      ) {
+        const userObj: User = {
+          // Ajusta campos según src/types/user si difieren
+          nombres: "",
+          apellidos: "",
+          rut: "",
+          fechaNacimiento: "",
+          email: storedEmail,
+          password: storedPassword,
+          // añadir aliases para compatibilidad con el resto de la app
+          correo: storedEmail,
+          contrasenna: storedPassword,
+        };
+        login(userObj);
+        navigate("/");
+        return;
+      } else {
+        setErrors({
+          email: "Correo o contraseña incorrectos",
+          password: "Correo o contraseña incorrectos",
+        });
+        return;
+      }
+    }
 
-      navigate("/"); // Redirigir al home
+    // Si parseó correctamente, comparar campos posibles
+    const storedEmail = storedUser?.email ?? storedUser?.correo ?? "";
+    const storedPassword =
+      storedUser?.password ??
+      storedUser?.contrasenna ??
+      storedUser?.contrasena ??
+      "";
+
+    if (
+      values.email.trim().toLowerCase() ===
+        String(storedEmail).trim().toLowerCase() &&
+      values.password === String(storedPassword)
+    ) {
+      // extraer storedUser de forma segura como un record genérico
+      const su = (storedUser ?? {}) as Record<string, unknown>;
+      const getString = (v: unknown) =>
+        typeof v === "string" ? v : v == null ? "" : String(v);
+
+      const userObj: User = {
+        nombres: getString(su["nombres"] ?? su["firstName"]),
+        apellidos: getString(su["apellidos"] ?? su["lastName"]),
+        rut: getString(su["rut"]),
+        fechaNacimiento: getString(su["fechaNacimiento"] ?? su["birthDate"]),
+        email: String(storedEmail),
+        password: String(storedPassword),
+        // añadir campos alternativos para correo/contraseña por compatibilidad
+        correo: getString(su["correo"] ?? su["email"] ?? storedEmail),
+        contrasenna: getString(
+          su["contrasenna"] ??
+            su["password"] ??
+            su["contrasena"] ??
+            storedPassword
+        ),
+      };
+
+      login(userObj);
+      navigate("/");
     } else {
       setErrors({
         email: "Correo o contraseña incorrectos",
@@ -101,7 +160,8 @@ const Login = () => {
           <img
             src={OnlyFlans_logo}
             className="logo-container img-fluid rounded-5 shadow"
-            style={{ maxWidth: "200px;", maxHeight: "200px" }}
+            style={{ maxWidth: "200px", maxHeight: "200px" }}
+            alt="OnlyFlans logo"
           />
         </div>
 
@@ -152,8 +212,7 @@ const Login = () => {
           </div>
           <div className="text-center mt-3">
             <p>
-              ¿No tienes cuenta?
-              <Link to="/register">Regístrate</Link>
+              ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
             </p>
           </div>
         </form>

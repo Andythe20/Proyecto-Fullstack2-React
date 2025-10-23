@@ -7,14 +7,17 @@ import { useAuth } from "../../hooks/useAuth";
 import { useCarrito } from "../../hooks/useCarrito";
 
 function Navbar() {
-  const { user, logout } = useAuth(); // <-- usar AuthContext
+  const { user, logout } = useAuth();
   const { totalQuantity } = useCarrito();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout(); // <-- limpia el user del contexto y del localStorage
-    window.location.href = "/"; // redirigir
+    logout();
+    window.location.href = "/";
   };
+
+  // No hacemos return temprano: permitimos renderizar la barra aunque no haya user
+  // (cuando no hay user mostramos el enlace "Iniciar sesión")
 
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary barra-navegacion fixed-top shadow">
@@ -80,7 +83,18 @@ function Navbar() {
                 </a>
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li>
-                    <button className="dropdown-item" onClick={handleLogout}>
+                    <Link className="dropdown-item" to="/perfil">
+                      Mi Perfil
+                    </Link>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <button
+                      className="dropdown-item text-danger"
+                      onClick={handleLogout}
+                    >
                       Cerrar sesión
                     </button>
                   </li>

@@ -4,9 +4,8 @@ import {
   passwordValidator,
   type PasswordValidationResult,
 } from "./passwordValidator";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Field from "../../components/Field/Field";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
@@ -43,7 +42,7 @@ const Register = () => {
   const [passwordValidation, setPasswordValidation] =
     useState<PasswordValidationResult | null>(null);
 
-  //validar rut
+  // validar rut
   const validateRut = (rutCompleto: string) => {
     // 1. Elimina puntos y guiones, y convierte a mayúsculas
     rutCompleto = rutCompleto
@@ -263,6 +262,10 @@ const Register = () => {
         apellidos: values.apellidos,
         rut: values.rut,
         fechaNacimiento: values.fechaNacimiento,
+        // propiedades esperadas por el tipo User
+        correo: values.correo,
+        contrasenna: values.contraseña,
+        // mantener también las claves originales si se usan en otros lugares/localStorage
         email: values.correo,
         password: values.contraseña,
       };
@@ -474,7 +477,7 @@ const Register = () => {
 
           <div className="text-center mt-3">
             <p>
-              ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>{" "}
+              ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
             </p>
           </div>
         </form>

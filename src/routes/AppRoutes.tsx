@@ -10,7 +10,7 @@ import Login from "../pages/Login/Login";
 import { NotFound } from "../pages/NotFound/NotFound";
 import Productos from "../pages/Productos/Productos";
 import Register from "../pages/Register/Register";
-// ... otras importaciones
+import Perfil from "../pages/Perfil/Perfil";
 
 function AppRoutes() {
   return (
@@ -21,6 +21,15 @@ function AppRoutes() {
       <Route path="/contacto" element={<Contacto />} />
 
       {/* Rutas protegidas */}
+      <Route
+        path="/perfil"
+        element={
+          <ProtectedRoute>
+            <Perfil />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/carrito"
         element={
