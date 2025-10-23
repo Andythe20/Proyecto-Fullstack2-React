@@ -4,8 +4,11 @@ import OnlyFlans_logo from "../../assets/Imagenes/OnlyFlans_logo.png";
 import Field from "../../components/Field/Field";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
+  const { login } = useAuth();
+
   // Estado para los valores de los campos
   const [values, setValues] = useState({
     email: "",
@@ -76,8 +79,13 @@ const Login = () => {
       values.password === storedPassword
     ) {
       // Login exitoso: marcar sesión y redirigir
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/"); // ajustar ruta de destino según tu app
+      // Ejemplo mejorado para el login
+      login({
+        email: storedEmail, //guardar usuario con email y password
+        password: storedPassword,
+      });
+
+      navigate("/"); // Redirigir al home
     } else {
       setErrors({
         email: "Correo o contraseña incorrectos",

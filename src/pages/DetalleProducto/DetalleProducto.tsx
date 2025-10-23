@@ -165,6 +165,7 @@ function DetalleProducto() {
                 <div className="col-8 col-sm-9">
                   <div style={{ marginTop: "31px" }}>
                     <Button
+                      id="add-to-cart-button"
                       text="Agregar"
                       className="btn btnBrown mt-auto fs-5"
                       icon="fas fa-shopping-cart"

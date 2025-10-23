@@ -6,8 +6,13 @@ import {
 } from "./passwordValidator";
 import { Link } from "react-router-dom";
 import Field from "../../components/Field/Field";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   // Estado para los valores de los campos
   const [values, setValues] = useState({
     nombres: "",
@@ -252,19 +257,27 @@ const Register = () => {
     setTermsError("");
 
     if (validateForm()) {
-      // Aquí tu función showToastAlert (asegúrate de tenerla definida)
+      // Construir objeto usuario para guardar
+      const user = {
+        nombres: values.nombres,
+        apellidos: values.apellidos,
+        rut: values.rut,
+        fechaNacimiento: values.fechaNacimiento,
+        email: values.correo,
+        password: values.contraseña,
+      };
 
-      // Limpiar los campos
+      // Guardar en Local Storage
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Loguear automáticamente
+      login(user);
+
+      // Redirigir al home o donde prefieras
+      navigate("/");
+
+      // Limpiar si quieres
       setValues({
-        nombres: "",
-        apellidos: "",
-        rut: "",
-        fechaNacimiento: "",
-        correo: "",
-        contraseña: "",
-        confirmarContraseña: "",
-      });
-      setErrors({
         nombres: "",
         apellidos: "",
         rut: "",
@@ -276,7 +289,7 @@ const Register = () => {
       setPasswordValidation(null);
       setTermsAccepted(false);
     } else {
-      // Aquí tu función showToastAlert (asegúrate de tenerla definida)
+      // Aquí podrías mostrar un toast más adelante
     }
   };
 
@@ -364,7 +377,7 @@ const Register = () => {
           <Field
             className="mb-3"
             titleText="Correo Electrónico"
-            id="birthDate"
+            id="email"
             type="email"
             placeholder="nombre@dominio.com"
             required
