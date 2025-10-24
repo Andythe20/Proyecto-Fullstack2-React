@@ -18,5 +18,5 @@ export const authenticateUser = (
   const user = getRegisteredUser();
   if (!user) return null;
 
-  return user.correo === email && user.contrasenna === password ? user : null;
+  return user.email === email && user.password === password ? user : null;
 };

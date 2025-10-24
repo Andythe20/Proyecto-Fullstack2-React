@@ -19,6 +19,7 @@ function AppRoutes() {
       <Route path="/nosotros" element={<Nosotros />} />
       <Route path="/productos" element={<Productos />} />
       <Route path="/contacto" element={<Contacto />} />
+      <Route path="/carrito" element={<CarritoPage />} />
 
       {/* Rutas protegidas */}
       <Route
@@ -30,14 +31,6 @@ function AppRoutes() {
         }
       />
 
-      <Route
-        path="/carrito"
-        element={
-          <ProtectedRoute>
-            <CarritoPage />
-          </ProtectedRoute>
-        }
-      />
       <Route
         path="/detalleProducto"
         element={

@@ -92,9 +92,6 @@ const Login = () => {
           fechaNacimiento: "",
           email: storedEmail,
           password: storedPassword,
-          // añadir aliases para compatibilidad con el resto de la app
-          correo: storedEmail,
-          contrasenna: storedPassword,
         };
         login(userObj);
         navigate("/");
@@ -133,14 +130,6 @@ const Login = () => {
         fechaNacimiento: getString(su["fechaNacimiento"] ?? su["birthDate"]),
         email: String(storedEmail),
         password: String(storedPassword),
-        // añadir campos alternativos para correo/contraseña por compatibilidad
-        correo: getString(su["correo"] ?? su["email"] ?? storedEmail),
-        contrasenna: getString(
-          su["contrasenna"] ??
-            su["password"] ??
-            su["contrasena"] ??
-            storedPassword
-        ),
       };
 
       login(userObj);

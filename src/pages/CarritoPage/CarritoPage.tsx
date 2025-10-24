@@ -4,9 +4,12 @@ import ProdSugeridos from "../../components/ProdSugeridos/ProdSugeridos";
 import formatCurrency from "../../utils/formatCurrency";
 import "./CarritoPage.css";
 import { handleCheckout } from "../../utils/handleCheckout";
+import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 function CarritoPage() {
   const { carrito: items, addProduct, removeProduct, clearCart } = useCarrito();
+  const { user } = useAuth();
 
   // Calcula el total del carrito
   const total = items.reduce(
@@ -32,6 +35,33 @@ function CarritoPage() {
 
   // Verifica si el carrito está vacío
   const isEmpty = items.length === 0;
+
+  const renderCheckoutButton = () => {
+    if (user) {
+      return (
+        <Button
+          text="Proceder al Pago"
+          className="btn btnBrown btn-lg px-4"
+          icon="fas fa-credit-card"
+          onClick={() => handleCheckout(clearCart)}
+          id="checkout-button"
+        />
+      );
+    } else {
+      return (
+        <div className="d-flex gap-2">
+          <Link to="/login" className="btn btnBrown btn-lg px-4">
+            <i className="fas fa-sign-in-alt me-2"></i>
+            Iniciar sesión para comprar
+          </Link>
+          <Link to="/register" className="btn btn-outline-primary btn-lg px-4">
+            <i className="fas fa-user-plus me-2"></i>
+            Registrarse
+          </Link>
+        </div>
+      );
+    }
+  };
 
   return (
     <main className="container-fluid my-5">
@@ -173,15 +203,9 @@ function CarritoPage() {
                   className="btn btn-outline-danger btn-lg px-4"
                   icon="fas fa-trash"
                   onClick={clearCart}
+                  id="empty-cart-button"
                 />
-                <Button
-                  text="Proceder al Pago"
-                  className="btn btnBrown btn-lg px-4"
-                  icon="fas fa-credit-card"
-                  onClick={
-                    () => handleCheckout(clearCart) // Vacía el carrito tras el pago
-                  }
-                />
+                {renderCheckoutButton()}
               </div>
             </div>
           )}

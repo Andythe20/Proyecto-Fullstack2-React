@@ -16,9 +16,6 @@ function Navbar() {
     window.location.href = "/";
   };
 
-  // No hacemos return temprano: permitimos renderizar la barra aunque no haya user
-  // (cuando no hay user mostramos el enlace "Iniciar sesión")
-
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary barra-navegacion fixed-top shadow">
       <div className="container-fluid">
