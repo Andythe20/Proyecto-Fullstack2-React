@@ -15,6 +15,7 @@ export interface PasswordValidationResult {
 }
 
 class PasswordValidator {
+  // Criterios de validación
   private readonly criteria = {
     minLength: 8,
     requireUppercase: true,

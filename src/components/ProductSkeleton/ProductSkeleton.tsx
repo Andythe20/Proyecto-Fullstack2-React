@@ -1,4 +1,4 @@
-function ProductSkeleton(){
+function ProductSkeleton() {
   return (
     <div className="col-sm-6 col-md-4 mb-3">
       <div className="card" aria-hidden="true">

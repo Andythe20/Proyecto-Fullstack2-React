@@ -40,50 +40,48 @@ function ProdSugeridos() {
       </main>
     );
   return (
-
-      <div className="row" id="product-list">
-        {productosSugeridos.map((producto, index) => (
-          <div
-            key={producto.codigo}
-            className="col-12 col-md-6 mb-4 d-flex fade-in-up"
-            style={{ animationDelay: `${index * 0.15}s` }}
-          >
-            <div className="card h-100 shadow-sm flex-fill">
-              <img
-                src={producto.url}
-                alt={producto.nombre}
-                className="card-img-top product-image"
+    <div className="row" id="product-list">
+      {productosSugeridos.map((producto, index) => (
+        <div
+          key={producto.codigo}
+          className="col-12 col-md-6 mb-4 d-flex fade-in-up"
+          style={{ animationDelay: `${index * 0.15}s` }}
+        >
+          <div className="card h-100 shadow-sm flex-fill">
+            <img
+              src={producto.url}
+              alt={producto.nombre}
+              className="card-img-top product-image"
+            />
+            <div className="card-body text-center">
+              <h6 className="card-title">{producto.nombre}</h6>
+              <p className="card-text small text-muted">
+                {producto.descripcion}
+              </p>
+              <p className="product-price mb-3 fw-bold">
+                {formatCurrency(producto.precio)} c/u
+              </p>
+              <Button
+                text="Agregar al Carrito"
+                icon="fas fa-plus"
+                className="btn btnBrown btn-sm w-100"
+                onClick={() => addProduct({ ...producto, quantity: 1 })}
+                id={""}
               />
-              <div className="card-body text-center">
-                <h6 className="card-title">{producto.nombre}</h6>
-                <p className="card-text small text-muted">
-                  {producto.descripcion}
-                </p>
-                <p className="product-price mb-3 fw-bold">
-                  {formatCurrency(producto.precio)} c/u
-                </p>
-                <Button
-                  text="Agregar al Carrito"
-                  icon="fas fa-plus"
-                  className="btn btnBrown btn-sm w-100"
-                  onClick={() => addProduct({ ...producto, quantity: 1 })}
-                />
-              </div>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
 
-        {/* Si no hay productos sugeridos */}
-        {productosSugeridos.length === 0 && (
-          <div className="text-center text-muted my-5">
-            <h2>Felicidades</h2>
-            <p className="my-5">
-              Ya tienes todos los productos en tu carrito 🎉
-            </p>
-            <h3 className="my-5">Muchas gracias!!!</h3>
-          </div>
-        )}
-      </div>
+      {/* Si no hay productos sugeridos */}
+      {productosSugeridos.length === 0 && (
+        <div className="text-center text-muted my-5">
+          <h2>Felicidades</h2>
+          <p className="my-5">Ya tienes todos los productos en tu carrito 🎉</p>
+          <h3 className="my-5">Muchas gracias!!!</h3>
+        </div>
+      )}
+    </div>
   );
 }
 

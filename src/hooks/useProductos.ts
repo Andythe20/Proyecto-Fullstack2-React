@@ -3,7 +3,6 @@ import type { Product } from "../types/product";
 
 // Hook personalizado para manejar productos
 function useProductos() {
-
   // Aquí iría la lógica para manejar productos
   const [productos, setProductos] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +20,7 @@ function useProductos() {
         // Manejo de errores HTTP
         if (!res.ok) throw new Error("Error al obtener los productos");
 
-        // Simular espera de 2 segundos
+        // Simular espera de 0.8 segundos
         await new Promise((resolve) => setTimeout(resolve, 800));
 
         // Transformar la respuesta a JSON
@@ -42,9 +41,9 @@ function useProductos() {
   // Función para obtener un producto por su código
   function getProductoByCode(codigo: string) {
     return productos.find((p) => p.codigo === codigo) || null;
-  };
+  }
 
-  // 
+  //
   return { productos, isLoading, error, getProductoByCode };
 }
 

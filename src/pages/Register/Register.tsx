@@ -3,7 +3,7 @@ import "./Register.css";
 import {
   passwordValidator,
   type PasswordValidationResult,
-} from "./passwordValidator";
+} from "../../utils/passwordValidator";
 import { Link, useNavigate } from "react-router-dom";
 import Field from "../../components/Field/Field";
 import { useAuth } from "../../hooks/useAuth";
@@ -262,10 +262,6 @@ const Register = () => {
         apellidos: values.apellidos,
         rut: values.rut,
         fechaNacimiento: values.fechaNacimiento,
-        // propiedades esperadas por el tipo User
-        correo: values.correo,
-        contrasenna: values.contraseña,
-        // mantener también las claves originales si se usan en otros lugares/localStorage
         email: values.correo,
         password: values.contraseña,
       };
@@ -276,23 +272,8 @@ const Register = () => {
       // Loguear automáticamente
       login(user);
 
-      // Redirigir al home o donde prefieras
+      // Redirigir al home
       navigate("/");
-
-      // Limpiar si quieres
-      setValues({
-        nombres: "",
-        apellidos: "",
-        rut: "",
-        fechaNacimiento: "",
-        correo: "",
-        contraseña: "",
-        confirmarContraseña: "",
-      });
-      setPasswordValidation(null);
-      setTermsAccepted(false);
-    } else {
-      // Aquí podrías mostrar un toast más adelante
     }
   };
 
