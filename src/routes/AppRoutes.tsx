@@ -20,6 +20,7 @@ function AppRoutes() {
       <Route path="/productos" element={<Productos />} />
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/carrito" element={<CarritoPage />} />
+      <Route path="/detalleProducto" element={<DetalleProducto />} />
 
       {/* Rutas protegidas */}
       <Route
@@ -27,15 +28,6 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Perfil />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/detalleProducto"
-        element={
-          <ProtectedRoute>
-            <DetalleProducto />
           </ProtectedRoute>
         }
       />
