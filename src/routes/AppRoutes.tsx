@@ -11,6 +11,8 @@ import { NotFound } from "../pages/NotFound/NotFound";
 import Productos from "../pages/Productos/Productos";
 import Register from "../pages/Register/Register";
 import Perfil from "../pages/Perfil/Perfil";
+import AdminProductos from "../pages/AdminPage/AdminPage";
+import DownloadPage from "../pages/downloadPage/DownloadPage";
 
 function AppRoutes() {
   return (
@@ -21,6 +23,9 @@ function AppRoutes() {
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/carrito" element={<CarritoPage />} />
       <Route path="/detalleProducto" element={<DetalleProducto />} />
+
+      <Route path="/admin" element={<AdminProductos />} />
+      <Route path="/download" element={<DownloadPage />} />
 
       {/* Rutas protegidas */}
       <Route

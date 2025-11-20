@@ -1,0 +1,25 @@
+.alert-soft {
+  background-color: var(--color-rosa-pastel) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-chocolate) !important;
+  font-family: var(--font-primary-lato);
+}
+
+.alert {
+  font-family: var(--font-header-pacifico) !important;
+}
+
+.badge-chocolate {
+  background-color: var(--color-chocolate) !important;
+  color: var(--color-soft-pink) !important;
+  font-family: var(--font-header-pacifico) !important;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 50%;
+}
+
+.bg-card-rosa {
+  background-color: var(--color-rosa-pastel) !important;
+  font-family: var(--font-primary-lato);
+  border-radius: 12px;
+}
