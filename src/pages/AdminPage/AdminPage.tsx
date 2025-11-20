@@ -56,7 +56,7 @@ const dataInicial: Producto[] = [
     "nombre": "Tiramisú Clásico",
     "descripcion": "Un postre italiano individual con capas de café, mascarpone y cacao, perfecto para finalizar cualquier comida.",
     "precio": 5500,
-    "url": "https://www.gourmet.cl/wp-content/uploads/2016/09/Tiramisu.png"
+    "url": "https://www.paulinacocina.net/wp-content/uploads/2020/01/receta-de-tiramisu-facil-y-economico-1740483918.jpg"
   },
   {
     "codigo": "PSA001",

@@ -58,6 +58,9 @@ function Navbar() {
             <Link className="nav-link" to="/contacto">
               Contacto
             </Link>
+            <Link className="nav-link" to="/download">
+              Descarga nuestra App
+            </Link>
           </div>
 
           <div className="navbar-nav ms-auto">

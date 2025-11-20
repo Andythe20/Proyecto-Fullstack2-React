@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,15 +9,10 @@ import AppRoutes from "./routes/AppRoutes.tsx";
 import { AuthProvider } from "./context/AuthProvider";
 import Footer from "./components/Footer/Footer.tsx";
 import { CarritoProvider } from "./context/CarritoProvider.tsx";
-import AdminProductos from "./pages/AdminPage/AdminPage.tsx";
+
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <AdminProductos></AdminProductos>
-  </StrictMode>
-);
-
-/*    <AuthProvider>
+<AuthProvider>
       <CarritoProvider>
         <BrowserRouter>
           <Navbar />
@@ -27,4 +21,4 @@ createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </CarritoProvider>
     </AuthProvider>
-*/
+);
