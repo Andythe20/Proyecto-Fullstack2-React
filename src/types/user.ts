@@ -1,3 +1,4 @@
+/*
 export interface User {
   email: string;
   password?: string;
@@ -5,4 +6,14 @@ export interface User {
   apellidos?: string;
   rut?: string;
   fechaNacimiento?: string;
+}
+  */
+
+export interface User {
+  rut: string;
+  nombres: string;
+  apellidos: string;
+  fechaNacimiento: string;
+  email: string;
+  contrasenna: string;
 }
