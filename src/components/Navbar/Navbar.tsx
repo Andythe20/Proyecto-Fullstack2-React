@@ -59,7 +59,7 @@ function Navbar() {
               Contacto
             </Link>
             <Link className="nav-link" to="/download">
-              Descarga nuestra App
+              Descargar App
             </Link>
           </div>
 
