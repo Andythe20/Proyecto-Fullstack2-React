@@ -6,7 +6,7 @@ import "./index.css";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes.tsx";
-import { AuthProvider } from "./context/AuthProvider";
+import { AuthProvider } from "./context/AuthContextJWT.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import { CarritoProvider } from "./context/CarritoProvider.tsx";
 

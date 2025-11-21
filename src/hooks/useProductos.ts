@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Product } from "../types/product";
+//import { useAuth } from "../hooks/useAuth";
 
 // Hook personalizado para manejar productos
 function useProductos() {
@@ -8,10 +9,12 @@ function useProductos() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  //const { accessToken } = useAuth();
+  const API_URL = "http://34.204.118.73/api/v1/products"; // Reemplazar con API REST definitiva
+
   // Fetch de productos desde un JSON local o API
   useEffect(() => {
-    const API_URL = "/data/db.json"; // Reemplazar con API REST definitiva
-
+    
     // Función asíncrona para obtener productos
     const fetchProductos = async () => {
       try {

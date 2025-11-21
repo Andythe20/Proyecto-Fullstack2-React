@@ -6,7 +6,7 @@ import Inicio from "../pages/Inicio/Inicio";
 import Nosotros from "../pages/Sobre-nosotros/Nosotros";
 import Contacto from "../pages/Contacto/Contacto";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
-import Login from "../pages/Login/Login";
+import Login from "../pages/Login/LoginJWT";
 import { NotFound } from "../pages/NotFound/NotFound";
 import Productos from "../pages/Productos/Productos";
 import Register from "../pages/Register/Register";
@@ -37,6 +37,7 @@ function AppRoutes() {
         }
       />
 
+      {/*<Route path="/login" element={<Login />} /> */}
       <Route path="/login" element={<Login />} />
       <Route path="/forgotPassword" element={<ForgotPassword />} />
       <Route path="/register" element={<Register />} />
