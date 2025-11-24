@@ -6,7 +6,7 @@ function useProductos() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = "https://absolute-cad-conditions-leeds.trycloudflare.com/api/v1/products"; // Ruta relativa para que Netlify haga de proxy
+  const API_URL = "/api/v1/products"; // Ruta relativa para que Netlify haga de proxy
 
   useEffect(() => {
     const fetchProductos = async () => {

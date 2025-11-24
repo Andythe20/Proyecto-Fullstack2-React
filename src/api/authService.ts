@@ -42,7 +42,7 @@ export const logout = async (): Promise<boolean> => {
   }
 
   try {
-    const response = await fetch("http://34.204.118.73/auth/logout", {
+    const response = await fetch("/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
