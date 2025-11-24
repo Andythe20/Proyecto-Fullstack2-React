@@ -3,10 +3,6 @@ name: Build and deploy to Netlify
 on:
   push:
     branches: [main]
-    # Ignorar cambios en archivos generados por el build para evitar loop
-    paths-ignore:
-      - 'dist/**'
-      - 'netlify.toml'
   pull_request:
     branches: [main]
     types: [closed]
@@ -14,9 +10,8 @@ on:
 jobs:
   deploy:
     if: |
-      github.repository == 'Andythe20/Proyecto-Fullstack2-React' &&
-      (github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+      (github.event_name == 'push' && github.actor == 'Andythe20') || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
@@ -40,3 +35,4 @@ jobs:
           env:
             NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
             NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        
