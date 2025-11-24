@@ -1,39 +1,42 @@
 name: Build and deploy to Netlify
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-        types: [closed]
+  push:
+    branches: [main]
+    # Ignorar cambios en archivos generados por el build para evitar loop
+    paths-ignore:
+      - 'dist/**'
+      - 'netlify.toml'
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 jobs:
-    deploy:
-        if: |
-          github.repository == 'Andythe20/Proyecto-Fullstack2-React' &&
-          (github.event_name == 'push' || 
-          (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+  deploy:
+    if: |
+      github.repository == 'Andythe20/Proyecto-Fullstack2-React' &&
+      (github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+    runs-on: ubuntu-latest
 
-        runs-on: ubuntu-latest
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+        - name: Set up Node.js environment
+          uses: actions/setup-node@v4
+          with:
+              node-version: 20
+              cache: "npm"
 
-            - name: Set up Node.js environment
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: "npm"
+        - name: Install project dependencies
+          run: npm install
 
-            - name: Install project dependencies
-              run: npm install
+        - name: Build the project
+          run: npm run build
 
-            - name: Build the project
-              run: npm run build
-
-            - name: Deploy to Netlify
-              run: npx netlify deploy --prod --dir=. --site=$NETLIFY_SITE_ID
-              env:
-                NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-                NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        - name: Deploy to Netlify
+          run: npx netlify deploy --prod --dir=. --site=$NETLIFY_SITE_ID
+          env:
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
