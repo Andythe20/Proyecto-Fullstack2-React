@@ -3,9 +3,10 @@
   command = "npm run build"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "http://34.204.118.73/:splat"
   status = 200
+  force = true
 
 # Configuración para headers de seguridad
 [[headers]]
