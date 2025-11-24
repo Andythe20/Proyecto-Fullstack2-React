@@ -10,7 +10,8 @@ function useProductos() {
   const [error, setError] = useState<string | null>(null);
 
   //const { accessToken } = useAuth();
-  const API_URL = "http://34.204.118.73/api/v1/products"; // Reemplazar con API REST definitiva
+  // En vez de http://34.204.118.73/api/v1/products
+  const API_URL = "/api/v1/products"; // Reemplazar con API REST definitiva
 
   // Fetch de productos desde un JSON local o API
   useEffect(() => {
