@@ -6,6 +6,21 @@ export default defineConfig({
   plugins: [react()],
   base: "./",
   assetsInclude: ["**/*.ttf"],
+
+  // PROXY PARA QUE FETCH FUNCIONE EN LOCAL
+  server: {
+    proxy: {
+      "/api/v1": {
+        target: "http://34.204.118.73",
+        changeOrigin: true,
+      },
+      "/auth": {
+        target: "http://34.204.118.73",
+        changeOrigin: true,
+      },
+    },
+  },
+
   test: {
     globals: true,
     environment: "jsdom",
