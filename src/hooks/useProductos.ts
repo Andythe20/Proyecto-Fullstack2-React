@@ -1,53 +1,55 @@
 import { useState, useEffect } from "react";
 import type { Product } from "../types/product";
-//import { useAuth } from "../hooks/useAuth";
 
-// Hook personalizado para manejar productos
 function useProductos() {
-  // Aquí iría la lógica para manejar productos
   const [productos, setProductos] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  //const { accessToken } = useAuth();
-  // En vez de http://34.204.118.73/api/v1/products
-  const API_URL = "/api/v1/products"; // Reemplazar con API REST definitiva
+  const API_URL = "/api/v1/products"; // Ruta relativa para que Netlify haga de proxy
 
-  // Fetch de productos desde un JSON local o API
   useEffect(() => {
-    
-    // Función asíncrona para obtener productos
     const fetchProductos = async () => {
       try {
+        console.log("Iniciando fetch a:", API_URL);
+
         const res = await fetch(API_URL);
 
-        // Manejo de errores HTTP
-        if (!res.ok) throw new Error("Error al obtener los productos");
+        console.log("Fetch completado");
+        console.log("Response URL:", res.url);
+        console.log("Status:", res.status);
+        console.log("Headers:", Array.from(res.headers.entries()));
 
-        // Simular espera de 0.8 segundos
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("Error HTTP:", res.status, errorText);
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
+        }
 
-        // Transformar la respuesta a JSON
         const data = await res.json();
+        console.log("Datos recibidos:", data);
 
-        // Actualizar estado
         setProductos(data);
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : String(err));
+        if (err instanceof Error) {
+          console.error("Error detallado al obtener productos:", err.message);
+          setError(err.message);
+        } else {
+          console.error("Error desconocido al obtener productos:", err);
+          setError(String(err));
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchProductos();
-  }, []); // Solo se ejecuta una vez al montar
+  }, []);
 
-  // Función para obtener un producto por su código
   function getProductoByCode(codigo: string) {
     return productos.find((p) => p.codigo === codigo) || null;
   }
 
-  //
   return { productos, isLoading, error, getProductoByCode };
 }
 

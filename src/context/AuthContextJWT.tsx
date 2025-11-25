@@ -20,7 +20,7 @@ export const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
 });
 
-const API_URL = "http://34.204.118.73";
+//const API_URL = ""; // Esto se define en vite.config.ts para desarrollo y public/_redirects en producción
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // LOGIN usando JWT
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
