@@ -1,6 +1,6 @@
 # OnlyFlans — Tienda de postres (React + TypeScript + Vite)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/8fc0eee7-95a9-47fa-82bc-1cba00041bac/deploy-status)](https://app.netlify.com/sites/onlyflans2/overview)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8fc0eee7-95a9-47fa-82bc-1cba00041bac/deploy-status)](https://app.netlify.com/sites/onlyflans2/overview) 
 
 ---
 
