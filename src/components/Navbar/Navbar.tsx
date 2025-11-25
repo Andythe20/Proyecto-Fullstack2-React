@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import OnlyFlans_logo from "../../assets/Imagenes/OnlyFlans_logo.png";
 import { IoCartOutline } from "react-icons/io5";
 
@@ -15,6 +16,12 @@ function Navbar() {
     logout();
     window.location.href = "/";
   };
+  const closeMenu = () => setMenuOpen(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setMenuOpen(false); // se cierra cada vez que cambia la ruta
+  }, [location.pathname]);
 
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary barra-navegacion fixed-top shadow">
@@ -46,19 +53,19 @@ function Navbar() {
           id="navbarNavAltMarkup"
         >
           <div className="navbar-nav me-auto">
-            <Link className="nav-link" to="/">
+            <Link className="nav-link" to="/" onClick={closeMenu}>
               Inicio
             </Link>
-            <Link className="nav-link" to="/nosotros">
+            <Link className="nav-link" to="/nosotros" onClick={closeMenu}>
               Nosotros
             </Link>
-            <Link className="nav-link" to="/productos">
+            <Link className="nav-link" to="/productos" onClick={closeMenu}>
               Productos
             </Link>
-            <Link className="nav-link" to="/contacto">
+            <Link className="nav-link" to="/contacto" onClick={closeMenu}>
               Contacto
             </Link>
-            <Link className="nav-link" to="/download">
+            <Link className="nav-link" to="/download" onClick={closeMenu}>
               Descargar App
             </Link>
           </div>
@@ -105,6 +112,7 @@ function Navbar() {
             <Link
               className="nav-link position-relative d-flex align-items-center me-3"
               to="/carrito"
+              onClick={closeMenu}
             >
               <div className="position-relative d-inline-block">
                 <IoCartOutline

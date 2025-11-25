@@ -1,2 +1,3 @@
 /api/v1/*      http://34.204.118.73/api/v1/:splat     200
 /auth/*        http://34.204.118.73/auth/:splat       200
+/*    /index.html   200
