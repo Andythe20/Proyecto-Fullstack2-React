@@ -64,15 +64,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         JSON.stringify({ accessToken, refreshToken })
       );
 
-      // Crear usuario temporal mínimo
-      const userData: User = {
-        email,
-        nombres: "",
-        apellidos: "",
-        rut: "",
-        fechaNacimiento: "",
-        password, // opcional
-      };
+      // Obtener usuario real desde tu backend
+      const userResponse = await fetch(`/api/v1/users/email/${email}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        console.error("Error al cargar el perfil del usuario");
+        return false;
+      }
+
+      const userData: User = await userResponse.json();
 
       setUser(userData);
       localStorage.setItem("authUser", JSON.stringify(userData));
