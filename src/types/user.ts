@@ -16,4 +16,5 @@ export interface User {
   fechaNacimiento: string;
   email: string;
   contrasenna: string;
+  userRole: string;
 }

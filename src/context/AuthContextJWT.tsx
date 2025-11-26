@@ -1,6 +1,15 @@
-// src/context/AuthContextJWT.tsx
 import { createContext, useState, useEffect } from "react";
 import type { User } from "../types/user";
+
+// --- DECODIFICAR TOKEN JWT ---
+function decodeJWT(token: string) {
+  try {
+    const base64 = token.split(".")[1];
+    return JSON.parse(atob(base64));
+  } catch {
+    return null;
+  }
+}
 
 type AuthContextType = {
   user: User | null;
@@ -9,6 +18,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
+  isAdmin: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -18,32 +28,47 @@ export const AuthContext = createContext<AuthContextType>({
   login: async () => false,
   logout: () => {},
   isAuthenticated: false,
+  isAdmin: false,
 });
-
-//const API_URL = ""; // Esto se define en vite.config.ts para desarrollo y public/_redirects en producción
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
-  // Restaurar sesión si hay tokens en localStorage
+  // --- FUNCION AUXILIAR ---
+  async function fetchUserData(email: string, token: string) {
+    const res = await fetch(`/api/v1/users/email/${email}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) return null;
+
+    return await res.json();
+  }
+
+  // Restaurar sesión
   useEffect(() => {
     const storedTokens = localStorage.getItem("authTokens");
-    const storedUser = localStorage.getItem("authUser");
 
     if (storedTokens) {
       const { accessToken, refreshToken } = JSON.parse(storedTokens);
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
-    }
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const payload = decodeJWT(accessToken);
+      if (!payload) return;
+
+      const email = payload.sub; // <-- AQUÍ VIENE EL EMAIL REAL
+
+      // Traer datos reales del backend
+      fetchUserData(email, accessToken).then((data) => {
+        if (data) setUser(data);
+      });
     }
   }, []);
 
-  // LOGIN usando JWT
+  // LOGIN
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       const response = await fetch(`/auth/login`, {
@@ -56,7 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const { accessToken, refreshToken } = await response.json();
 
-      // Guardamos tokens en estado y localStorage
+      // Guardar tokens
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       localStorage.setItem(
@@ -64,18 +89,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         JSON.stringify({ accessToken, refreshToken })
       );
 
-      // Crear usuario temporal mínimo
-      const userData: User = {
-        email,
-        nombres: "",
-        apellidos: "",
-        rut: "",
-        fechaNacimiento: "",
-        password, // opcional
-      };
+      // Sacar email desde el token
+      const payload = decodeJWT(accessToken);
+      const emailFromToken = payload.sub;
+
+      // Llamar backend para obtener datos reales
+      const userData = await fetchUserData(emailFromToken, accessToken);
+      if (!userData) return false;
 
       setUser(userData);
-      localStorage.setItem("authUser", JSON.stringify(userData));
 
       return true;
     } catch (err) {
@@ -102,6 +124,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         isAuthenticated: !!accessToken,
+        isAdmin: user?.userRole === "ADMIN",
       }}
     >
       {children}

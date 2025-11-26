@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import type { User } from "../../types/user";
 
 const Perfil = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) {
     return <p>No hay usuario autenticado</p>;
@@ -28,6 +30,17 @@ const Perfil = () => {
       <p>
         <strong>Fecha nacimiento:</strong> {perfil.fechaNacimiento}
       </p>
+
+      {/* 🔥 Botón visible SOLO si el usuario es ADMIN */}
+      {isAdmin && (
+        <button
+          className="btn btn-primary mt-3"
+          onClick={() => navigate("/admin")}
+        >
+          Panel de Administración
+        </button>
+      )}
+
     </div>
   );
 };
