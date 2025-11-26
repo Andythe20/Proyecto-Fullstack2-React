@@ -24,7 +24,11 @@ function AppRoutes() {
       <Route path="/carrito" element={<CarritoPage />} />
       <Route path="/detalleProducto" element={<DetalleProducto />} />
 
-      <Route path="/admin" element={<AdminProductos />} />
+      <Route path="/admin" element={
+        <ProtectedRoute adminOnly={true}>
+          <AdminProductos />
+        </ProtectedRoute>
+      } />
       <Route path="/download" element={<DownloadPage />} />
 
       {/* Rutas protegidas */}
