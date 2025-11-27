@@ -1,21 +1,26 @@
 import { BlinkBlur } from "react-loading-indicators";
-export default function LoadingSpinner() {
+
+export default function LoadingSpinner({
+  text = "Cargando producto...",
+}: {
+  text?: string;
+}) {
   return (
-   <div
+    <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",          // Ocupa toda la pantalla
+        height: "100vh",
         width: "100vw",
-        backgroundColor: "var(--color-cream-pastel)", // Fondo acorde a la web
+        backgroundColor: "var(--color-cream-pastel)",
         flexDirection: "column",
       }}
       role="status"
-      aria-label="Cargando"
+      aria-label={text}
     >
       <BlinkBlur
-        size="medium" // Ajusta el tamaño del spinner
+        size="medium"
         color={[
           "var(--color-chocolate)",
           "var(--color-soft-pink)",
@@ -23,8 +28,15 @@ export default function LoadingSpinner() {
           "var(--color-cream-pastel)",
         ]}
       />
-      <p style={{ color: "var(--color-text-primary)", marginTop: "1rem", fontFamily: "var(--font-primary-lato)" }}>
-        Cargando producto...
+
+      <p
+        style={{
+          color: "var(--color-text-primary)",
+          marginTop: "1rem",
+          fontFamily: "var(--font-primary-lato)",
+        }}
+      >
+        {text}
       </p>
     </div>
   );
