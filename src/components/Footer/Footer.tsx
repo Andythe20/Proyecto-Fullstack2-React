@@ -6,6 +6,7 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io";
 import "./Footer.css";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -62,6 +63,11 @@ function Footer() {
       <ul className="menu">
         <p className="texto">@2025 OnlyFlans | Todos los derechos reservados</p>
       </ul>
+
+      <ul>
+        <Link className="btn btnBrown rounded-pill px-4 font-lato" to="/login">Ver Créditos</Link>
+      </ul>
+
     </footer>
   );
 }

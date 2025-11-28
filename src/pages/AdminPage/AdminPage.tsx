@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useProductos from "../../hooks/useProductos";
 import type { Product } from "../../types/product";
+import Swal from "sweetalert2";
 
 
 const AdminProductos: React.FC = () => {
@@ -14,6 +15,9 @@ const AdminProductos: React.FC = () => {
     precio: 0,
     url: "",
   });
+
+  // Almacenar imagen arrastrada
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 
   // hook que trae productos desde la API
@@ -48,33 +52,131 @@ const AdminProductos: React.FC = () => {
       url: "",
     });
     setEditando(false);
+    setSelectedFile(null);
   };
 
-  const guardarProducto = () => {
-    if (editando) {
-      // UPDATE
-      setProductos(productos.map((p) => (p.codigo === form.codigo ? form : p)));
-    } else {
-      // CREATE
-      if (productos.find((p) => p.codigo === form.codigo)) {
-        alert("El código ya existe");
-        return;
-      }
-      setProductos([...productos, form]);
+const guardarProducto = async () => {
+  const authTokensLocal = localStorage.getItem("authTokens");
+
+  if (!authTokensLocal) {
+    alert("No hay tokens. Por favor, inicia sesión.");
+    return;
+  }
+
+  // parsear el JSON y extraer accessToken
+  const authTokens = JSON.parse(authTokensLocal);
+  const token = authTokens.accessToken;
+
+    if (!token) {
+      alert("No hay token. Por favor, inicia sesión.");
+      return;
     }
+    
+    // Si encuentra un código igual, no agregar
+    if (!editando && productos.find((p) => p.codigo === form.codigo)) {
+      alert("El código ya existe");
+      return;
+    }
+
+    if (editando) {
+      // PUT
+      const res = await fetch("/api/v1/products/" + form.codigo, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+
+        body: JSON.stringify({
+          categoria: form.categoria,
+          nombre: form.nombre,
+          descripcion: form.descripcion,
+          precio: form.precio,
+          url: form.url
+        }),
+      });
+
+      const updated: Product = await res.json();
+
+      setProductos((prev) =>
+        prev.map((x) => (x.codigo === updated.codigo ? updated : x))
+      );
+
+    } else {
+        // POST
+        const fd = new FormData();
+        if (selectedFile) fd.append("file", selectedFile);
+        fd.append("codigo", form.codigo);
+        fd.append("categoria", form.categoria);
+        fd.append("nombre", form.nombre);
+        fd.append("descripcion", form.descripcion);
+        fd.append("precio", String(form.precio));
+
+        const res = await fetch("/api/v1/products", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
+        });
+
+    const newProduct = await res.json();
+    setProductos((prev) => [...prev, newProduct]);
+  }
 
     limpiarFormulario();
-  };
+    
+};
 
-  const editarProducto = (p: Product) => {
-    setForm(p);
-    setEditando(true);
-  };
+const editarProducto = (p: Product) => {
+  setForm(p);
+  setEditando(true);
+};
 
-  const eliminarProducto = (codigo: string) => {
-    if (confirm("¿Eliminar producto?")) {
-      setProductos(productos.filter((p) => p.codigo !== codigo));
+
+  const eliminarProducto = async (codigo: string) => {
+      const confirmar = await Swal.fire({
+      title: "¿Eliminar producto?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    const authTokensLocal = localStorage.getItem("authTokens");
+
+    if (!authTokensLocal) {
+      alert("No hay tokens. Por favor, inicia sesión.");
+      return;
     }
+
+    if (!confirmar.isConfirmed) return;
+
+    if (!authTokensLocal) {
+      await Swal.fire({ icon: "error", title: "No autenticado", text: "Inicia sesión primero." });
+      return;
+    }
+
+    // parsear el JSON y extraer accessToken
+    const authTokens = JSON.parse(authTokensLocal);
+    const token = authTokens.accessToken;
+
+    try {
+      await fetch("/api/v1/products/" + codigo, {
+        method: "DELETE",
+        // Enviar token en el header Authorization para autenticación
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProductos(productos.filter((p) => p.codigo !== codigo));
+      await Swal.fire({ icon: "success", title: "Eliminado", text: "Producto eliminado correctamente." });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      alert("Error eliminando el producto: " + msg);
+    }
+
   };
 
   return (
@@ -152,9 +254,10 @@ const AdminProductos: React.FC = () => {
               const file = e.dataTransfer.files[0];
 
               if (file) {
-                // Esto genera una URL temporal local (por ejemplo: blob:http://localhost:5173/...).
-                const fakeUrl = URL.createObjectURL(file); // URL temporal
-                setForm({ ...form, url: fakeUrl });
+                // Guardar archivo seleccionado
+                setSelectedFile(file);
+
+                setForm({...form, url: ""})
               }
             }}
             style={{
@@ -170,17 +273,13 @@ const AdminProductos: React.FC = () => {
             Arrastra la imagen aquí
           </div>
 
-          {/* Input normal (por si eligen no arrastrar) */}
-          <input
-            type="text"
-            name="url"
-            placeholder="URL imagen"
-            value={form.url}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-          />
 
           {/* Previsualización */}
+          {selectedFile && (
+            <div style={{ textAlign: "center", marginBottom: "15px" }}>
+              <p><strong>Archivo seleccionado:</strong> {selectedFile.name}</p>
+            </div>
+          )}
           {form.url && (
             <div style={{ textAlign: "center", marginBottom: "15px" }}>
               <img
