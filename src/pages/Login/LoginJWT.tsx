@@ -5,6 +5,7 @@ import Field from "../../components/Field/Field";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const Login = () => {
   const { login } = useAuth();
@@ -19,6 +20,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -38,7 +41,9 @@ const Login = () => {
     if (newErrors.email || newErrors.password) return;
 
     // LLAMA AL BACKEND
+    setLoading(true);
     const success = await login(values.email, values.password);
+    setLoading(false);
 
     if (!success) {
       setErrors({
@@ -50,6 +55,10 @@ const Login = () => {
 
     navigate("/");
   };
+
+  if (loading) {
+    return <LoadingSpinner text="Iniciando sesión..." />;
+  }
 
   return (
     <div className="container" style={{ marginTop: "-70px" }}>

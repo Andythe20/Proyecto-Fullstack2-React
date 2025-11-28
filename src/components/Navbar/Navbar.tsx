@@ -6,9 +6,10 @@ import { IoCartOutline } from "react-icons/io5";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useCarrito } from "../../hooks/useCarrito";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { totalQuantity } = useCarrito();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -16,12 +17,17 @@ function Navbar() {
     logout();
     window.location.href = "/";
   };
+
   const closeMenu = () => setMenuOpen(false);
   const location = useLocation();
 
   useEffect(() => {
     setMenuOpen(false); // se cierra cada vez que cambia la ruta
   }, [location.pathname]);
+
+  if(loading){
+    return <LoadingSpinner text="Cargando sesión..." />;
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary barra-navegacion fixed-top shadow">

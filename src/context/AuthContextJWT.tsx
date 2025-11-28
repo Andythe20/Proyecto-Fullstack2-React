@@ -19,6 +19,7 @@ type AuthContextType = {
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  loading?: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // --- FUNCION AUXILIAR ---
   async function fetchUserData(email: string, token: string) {
@@ -57,14 +59,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setRefreshToken(refreshToken);
 
       const payload = decodeJWT(accessToken);
-      if (!payload) return;
+      if (!payload) {
+        setLoading(false);
+        return;
+      }
 
       const email = payload.sub; // <-- AQUÍ VIENE EL EMAIL REAL
 
       // Traer datos reales del backend
       fetchUserData(email, accessToken).then((data) => {
         if (data) setUser(data);
+        setLoading(false);
       });
+    }else {
+      setLoading(false);
     }
   }, []);
 
@@ -125,6 +133,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         isAuthenticated: !!accessToken,
         isAdmin: user?.userRole === "ADMIN",
+        loading,
       }}
     >
       {children}
