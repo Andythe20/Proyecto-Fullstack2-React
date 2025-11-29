@@ -65,7 +65,7 @@ function Footer() {
       </ul>
 
       <ul>
-        <Link className="btn btnBrown rounded-pill px-4 font-lato" to="/login">Ver Créditos</Link>
+        <Link className="btn btnBrown rounded-pill px-4 font-lato" to="/creditos">Ver Créditos</Link>
       </ul>
 
     </footer>

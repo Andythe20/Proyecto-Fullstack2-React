@@ -13,6 +13,7 @@ import Register from "../pages/Register/Register";
 import Perfil from "../pages/Perfil/Perfil";
 import AdminProductos from "../pages/AdminPage/AdminPage";
 import DownloadPage from "../pages/downloadPage/DownloadPage";
+import CreditosPage from "../pages/Creditos/CreditosPage";
 
 function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/carrito" element={<CarritoPage />} />
       <Route path="/detalleProducto" element={<DetalleProducto />} />
+      <Route path="/creditos" element={<CreditosPage/>} />
 
       <Route path="/admin" element={
         <ProtectedRoute adminOnly={true}>

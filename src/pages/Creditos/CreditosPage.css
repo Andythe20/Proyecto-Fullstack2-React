@@ -1,0 +1,28 @@
+.linkedin{
+    font-size: 32px; 
+    color: #0A66C2
+}
+
+.github{
+    font-size: 32px; 
+    color: #171515
+}
+
+.imagen-andy{
+    max-height: 200px;
+    max-width: 200px;
+}
+
+.hover-effect {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.hover-effect:hover {
+    transform: scale(1.2);
+    filter: brightness(0.8);
+}
+
+.titulo-container{
+        background: linear-gradient(90deg, var(--color-soft-pink) 0%, var(--color-blanco-roto) 100%);
+    
+}
