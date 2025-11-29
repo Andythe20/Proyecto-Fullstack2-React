@@ -11,11 +11,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/v1": {
-        target: "http://34.204.118.73",
+        //target: "http://34.204.118.73",
+        target: "http://localhost:8080",
         changeOrigin: true,
       },
       "/auth": {
-        target: "http://34.204.118.73",
+        //target: "http://34.204.118.73",
+        target: "http://localhost:8080",
         changeOrigin: true,
       },
     },

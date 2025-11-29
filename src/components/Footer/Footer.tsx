@@ -20,7 +20,7 @@ function Footer() {
           <a
             href="https://www.youtube.com/@CocinaAbiertaDuocUC"
             target="_blank"
-            className="icon"
+            className="icon youtube"
           >
             <IoLogoYoutube size={28} />
           </a>
@@ -29,7 +29,7 @@ function Footer() {
           <a
             href="https://www.facebook.com/DuocUC"
             target="_blank"
-            className="icon"
+            className="icon facebook"
           >
             <IoLogoFacebook size={28} />
           </a>
@@ -38,13 +38,13 @@ function Footer() {
           <a
             href="https://www.instagram.com/duocuc_cl"
             target="_blank"
-            className="icon"
+            className="icon instagram"
           >
             <IoLogoInstagram size={28} />
           </a>
         </li>
         <li className="icon-element">
-          <a href="https://x.com/DuocUC" target="_blank" className="icon">
+          <a href="https://x.com/DuocUC" target="_blank" className="icon twitter">
             <IoLogoTwitter size={28} />
           </a>
         </li>
@@ -53,7 +53,7 @@ function Footer() {
           <a
             href="https://www.linkedin.com/company/duocuc"
             target="_blank"
-            className="icon"
+            className="icon linkedin"
           >
             <IoLogoLinkedin size={28} />
           </a>
@@ -65,7 +65,7 @@ function Footer() {
       </ul>
 
       <ul>
-        <Link className="btn btnBrown rounded-pill px-4 font-lato" to="/login">Ver Créditos</Link>
+        <Link className="btn btnBrown rounded-pill px-4 font-lato" to="/creditos">Ver Créditos</Link>
       </ul>
 
     </footer>
