@@ -91,9 +91,10 @@ const Login = () => {
           rut: "",
           fechaNacimiento: "",
           email: storedEmail,
-          password: storedPassword,
+          contrasenna: storedPassword,
+          userRole: "user",
         };
-        login(userObj);
+        login(userObj.email, userObj.contrasenna);
         navigate("/");
         return;
       } else {
@@ -129,10 +130,11 @@ const Login = () => {
         rut: getString(su["rut"]),
         fechaNacimiento: getString(su["fechaNacimiento"] ?? su["birthDate"]),
         email: String(storedEmail),
-        password: String(storedPassword),
+        contrasenna: String(storedPassword),
+        userRole: getString(su["userRole"] ?? "user"),
       };
 
-      login(userObj);
+      login(userObj.email, userObj.contrasenna);
       navigate("/");
     } else {
       setErrors({
