@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
-import { passwordValidator, type PasswordValidationResult } from "../utils/passwordValidator";
+import {
+  passwordValidator,
+  type PasswordValidationResult,
+} from "../utils/passwordValidator";
 import { rutValidator } from "../utils/rutValidator";
 import { emailValidator } from "../utils/emailValidator";
 
@@ -48,7 +51,8 @@ export const useRegisterForm = () => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState("");
-  const [passwordValidation, setPasswordValidation] = useState<PasswordValidationResult | null>(null);
+  const [passwordValidation, setPasswordValidation] =
+    useState<PasswordValidationResult | null>(null);
 
   // Mapear IDs del formulario a los nombres del estado
   const fieldMap: { [key: string]: keyof FormValues } = {
@@ -65,66 +69,74 @@ export const useRegisterForm = () => {
    * Valida un campo individual y actualiza el estado de errores
    * También actualiza passwordValidation en vivo para el indicador
    */
-  const validateField = useCallback((field: keyof FormValues, value: string) => {
-    let error = "";
+  const validateField = useCallback(
+    (field: keyof FormValues, value: string) => {
+      let error = "";
 
-    if (field === "nombres" && value.trim().length < 3) {
-      error = "El nombre debe tener al menos 3 carácteres";
-    }
-
-    if (field === "apellidos" && value.trim().length < 3) {
-      error = "El apellido debe tener al menos 3 carácteres";
-    }
-
-    if (field === "rut") {
-      if (!rutValidator.validateRut(value)) {
-        error = "Rut no válido";
+      if (field === "nombres" && value.trim().length < 3) {
+        error = "El nombre debe tener al menos 3 carácteres";
       }
-    }
 
-    if (field === "correo") {
-      if (value && !emailValidator.validateEmail(value.trim())) {
-        error = "Ingrese un correo válido (ej: example@gmail.com).";
+      if (field === "apellidos" && value.trim().length < 3) {
+        error = "El apellido debe tener al menos 3 carácteres";
       }
-    }
 
-    if (field === "contraseña") {
-      const result = passwordValidator.validatePassword(value);
-      setPasswordValidation(result);
-      // No establecemos error aquí, el indicador visual lo maneja
-    }
-
-    if (field === "confirmarContraseña") {
-      if (value && value !== values.contraseña) {
-        error = "Las contraseñas no coinciden";
+      if (field === "rut") {
+        if (!rutValidator.validateRut(value)) {
+          error = "Rut no válido";
+        }
       }
-    }
 
-    setErrors((prev) => ({ ...prev, [field]: error }));
-  }, [values.contraseña]);
+      if (field === "correo") {
+        if (value && !emailValidator.validateEmail(value.trim())) {
+          error = "Ingrese un correo válido (ej: example@gmail.com).";
+        }
+      }
+
+      if (field === "contraseña") {
+        const result = passwordValidator.validatePassword(value);
+        setPasswordValidation(result);
+        // No establecemos error aquí, el indicador visual lo maneja
+      }
+
+      if (field === "confirmarContraseña") {
+        if (value && value !== values.contraseña) {
+          error = "Las contraseñas no coinciden";
+        }
+      }
+
+      setErrors((prev) => ({ ...prev, [field]: error }));
+    },
+    [values.contraseña]
+  );
 
   /**
    * Maneja cambios en los campos del formulario
    */
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const target = e.target as HTMLInputElement;
-    const { id, value, checked } = target;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const target = e.target as HTMLInputElement;
+      const { id, value, checked } = target;
 
-    if (id === "terms") {
-      setTermsAccepted(checked);
-      setTermsError(checked ? "" : "Debes aceptar los términos y condiciones");
-      return;
-    }
+      if (id === "terms") {
+        setTermsAccepted(checked);
+        setTermsError(
+          checked ? "" : "Debes aceptar los términos y condiciones"
+        );
+        return;
+      }
 
-    const fieldName = fieldMap[id] || (id as keyof FormValues);
+      const fieldName = fieldMap[id] || (id as keyof FormValues);
 
-    setValues((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
+      setValues((prev) => ({
+        ...prev,
+        [fieldName]: value,
+      }));
 
-    validateField(fieldName, value);
-  }, [fieldMap, validateField]);
+      validateField(fieldName, value);
+    },
+    [fieldMap, validateField]
+  );
 
   /**
    * Valida el formulario completo antes del envío
@@ -172,7 +184,8 @@ export const useRegisterForm = () => {
     if (values.contraseña) {
       const result = passwordValidator.validatePassword(values.contraseña);
       if (!result.meetsMinimum) {
-        newErrors.contraseña = "La contraseña no cumple con los requisitos mínimos";
+        newErrors.contraseña =
+          "La contraseña no cumple con los requisitos mínimos";
         isValid = false;
       }
     } else {
@@ -217,5 +230,6 @@ export const useRegisterForm = () => {
     validateForm,
     resetForm,
     setTermsError,
+    setErrors,
   };
 };

@@ -4,6 +4,7 @@ import Field from "../../components/Field/Field";
 import PasswordStrength from "../../components/PasswordStrength/PasswordStrength";
 import { useAuth } from "../../hooks/useAuth";
 import { useRegisterForm } from "../../hooks/useRegisterForm";
+import { useState } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,36 +20,100 @@ const Register = () => {
     validateForm,
     resetForm,
     setTermsError,
+    setErrors,
   } = useRegisterForm();
 
-  // Maneja el envío del formulario
-  const handleSubmit = (e: React.FormEvent) => {
+  // Maneja el envío del formulario: POST al backend y manejo de tokens/errores
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTermsError("");
 
-    if (validateForm()) {
-      // Construir objeto usuario para guardar
-      const user = {
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const payload = {
+        rut: values.rut,
         nombres: values.nombres,
         apellidos: values.apellidos,
-        rut: values.rut,
         fechaNacimiento: values.fechaNacimiento,
         email: values.correo,
         contrasenna: values.contraseña,
-        userRole: "user",
       };
 
-      // Guardar en Local Storage
-      localStorage.setItem("user", JSON.stringify(user));
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      // Loguear automáticamente
-      login(user.email, user.contrasenna);
+      if (res.status === 201 || res.ok) {
+        const body = await res.json().catch(() => ({}));
 
-      // Resetear formulario
-      resetForm();
+        if (body?.accessToken && body?.refreshToken) {
+          // Guardar tokens donde AuthContextJWT los espera
+          localStorage.setItem(
+            "authTokens",
+            JSON.stringify({
+              accessToken: body.accessToken,
+              refreshToken: body.refreshToken,
+            })
+          );
 
-      // Redirigir al home
-      navigate("/");
+          // Intentar login para que el contexto actualice user (reutiliza lógica existente)
+          try {
+            await login(values.correo, values.contraseña);
+          } catch (err) {
+            console.warn("Login automático falló tras registro:", err);
+          }
+
+          resetForm();
+          navigate("/");
+          return;
+        }
+
+        // Si backend no devuelve tokens, llamar a login
+        await login(values.correo, values.contraseña);
+        resetForm();
+        navigate("/");
+        return;
+      }
+
+      if (res.status === 409) {
+        const body = await res.json().catch(() => ({}));
+        setErrors((prev) => ({
+          ...prev,
+          correo: body.message ?? "El usuario ya existe",
+        }));
+        return;
+      }
+
+      if (res.status === 400) {
+        const body = await res.json().catch(() => ({}));
+        if (Array.isArray(body.errors)) {
+          const newErrors = { ...errors };
+          body.errors.forEach((err: any) => {
+            const mapBack: any = { email: "correo", password: "contraseña" };
+            const f = (mapBack[err.field] ??
+              err.field) as keyof typeof newErrors;
+            newErrors[f] = err.message;
+          });
+          setErrors(newErrors);
+          return;
+        }
+
+        if (body.message) setTermsError(body.message);
+        return;
+      }
+
+      setTermsError("Ocurrió un error en el servidor. Intenta más tarde.");
+    } catch (err) {
+      console.error("Registro error:", err);
+      setTermsError("Error de red. Verifica tu conexión.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -175,8 +240,8 @@ const Register = () => {
             )}
           </div>
 
-          <button type="submit" className="btn w-100">
-            Registrarse
+          <button type="submit" className="btn w-100" disabled={loading}>
+            {loading ? "Registrando..." : "Registrarse"}
           </button>
 
           <div className="text-center mt-3">
