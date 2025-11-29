@@ -3,6 +3,8 @@ import "./Login.css";
 import OnlyFlans_logo from "../../assets/Imagenes/OnlyFlans_logo.png";
 import Field from "../../components/Field/Field";
 import Button from "../../components/Button/Button";
+import { validateEmail } from "../../utils/validateEmail";
+
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -33,7 +35,11 @@ const Login = () => {
     e.preventDefault();
 
     const newErrors = {
-      email: values.email ? "" : "El correo es requerido",
+      email: !values.email
+        ? "El correo es requerido"
+        : !validateEmail(values.email)
+        ? "El correo no es válido"
+        : "",
       password: values.password ? "" : "La contraseña es requerida",
     };
 

@@ -3,7 +3,6 @@ import useProductos from "../../hooks/useProductos";
 import type { Product } from "../../types/product";
 import Swal from "sweetalert2";
 
-
 const AdminProductos: React.FC = () => {
   const [productos, setProductos] = useState<Product[]>([]);
   const [editando, setEditando] = useState<boolean>(false);
@@ -18,7 +17,6 @@ const AdminProductos: React.FC = () => {
 
   // Almacenar imagen arrastrada
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
 
   // hook que trae productos desde la API
   const { productos: backendProductos, isLoading, error } = useProductos();
@@ -35,8 +33,9 @@ const AdminProductos: React.FC = () => {
     }
   }, [backendProductos, isLoading, error]);
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setForm({ ...form, [name]: name === "precio" ? Number(value) : value });
@@ -55,45 +54,70 @@ const AdminProductos: React.FC = () => {
     setSelectedFile(null);
   };
 
-const guardarProducto = async () => {
-  const authTokensLocal = localStorage.getItem("authTokens");
+  const guardarProducto = async () => {
+    const authTokensLocal = localStorage.getItem("authTokens");
 
-  if (!authTokensLocal) {
-    alert("No hay tokens. Por favor, inicia sesión.");
-    return;
-  }
+    if (!authTokensLocal) {
+      alert("No hay tokens. Por favor, inicia sesión.");
+      return;
+    }
 
-  // parsear el JSON y extraer accessToken
-  const authTokens = JSON.parse(authTokensLocal);
-  const token = authTokens.accessToken;
+    // parsear el JSON y extraer accessToken
+    const authTokens = JSON.parse(authTokensLocal);
+    const token = authTokens.accessToken;
 
     if (!token) {
       alert("No hay token. Por favor, inicia sesión.");
       return;
     }
-    
+
     // Si encuentra un código igual, no agregar
     if (!editando && productos.find((p) => p.codigo === form.codigo)) {
       alert("El código ya existe");
       return;
     }
 
+    // PUT: Editar producto
     if (editando) {
-      // PUT
-      const res = await fetch("/api/v1/products/" + form.codigo, {
+      const fd = new FormData();
+
+      // Crear JSON con datos del producto
+      const productJson = JSON.stringify({
+        categoria: form.categoria,
+        nombre: form.nombre,
+        descripcion: form.descripcion,
+        precio: form.precio,
+        url: form.url,
+      });
+
+      // El backend recibe una solicitud multipart/form-data con 2 partes:
+      // 1) "product" → JSON con los campos del producto a actualizar
+      // 2) "file"    → (opcional) imagen en formato MultipartFile
+      //
+      // Para que Spring Boot pueda diferenciar ambas partes sin confusión,
+      // el JSON debe enviarse explícitamente como "application/json".
+      //
+      // Usamos un Blob para envolver el string JSON y asignarle ese MIME type.
+      // Si no se hace esto, el JSON se envía como texto plano ("text/plain")
+      // y Spring no puede convertirlo al DTO ProductUpdateRequest.
+      //
+      // Por eso, convertimos el JSON a un Blob antes de agregarlo al FormData:
+      fd.append(
+        "product",
+        new Blob([productJson], { type: "application/json" })
+      );
+
+      // Si hay imagen nueva agregarla al FormData
+      if (selectedFile) {
+        fd.append("file", selectedFile);
+      }
+
+      const res = await fetch(`/api/v1/products/${form.codigo}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-
-        body: JSON.stringify({
-          categoria: form.categoria,
-          nombre: form.nombre,
-          descripcion: form.descripcion,
-          precio: form.precio,
-          url: form.url
-        }),
+        body: fd,
       });
 
       const updated: Product = await res.json();
@@ -101,39 +125,36 @@ const guardarProducto = async () => {
       setProductos((prev) =>
         prev.map((x) => (x.codigo === updated.codigo ? updated : x))
       );
-
     } else {
-        // POST
-        const fd = new FormData();
-        if (selectedFile) fd.append("file", selectedFile);
-        fd.append("codigo", form.codigo);
-        fd.append("categoria", form.categoria);
-        fd.append("nombre", form.nombre);
-        fd.append("descripcion", form.descripcion);
-        fd.append("precio", String(form.precio));
+      // POST: Crear nuevo producto
+      const fd = new FormData();
+      if (selectedFile) fd.append("file", selectedFile);
+      fd.append("codigo", form.codigo);
+      fd.append("categoria", form.categoria);
+      fd.append("nombre", form.nombre);
+      fd.append("descripcion", form.descripcion);
+      fd.append("precio", String(form.precio));
 
-        const res = await fetch("/api/v1/products", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: fd,
-        });
+      const res = await fetch("/api/v1/products", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
 
-    const newProduct = await res.json();
-    setProductos((prev) => [...prev, newProduct]);
-  }
+      const newProduct = await res.json();
+      setProductos((prev) => [...prev, newProduct]);
+    }
 
     limpiarFormulario();
-    
-};
+  };
 
-const editarProducto = (p: Product) => {
-  setForm(p);
-  setEditando(true);
-};
-
+  const editarProducto = (p: Product) => {
+    setForm(p);
+    setEditando(true);
+  };
 
   const eliminarProducto = async (codigo: string) => {
-      const confirmar = await Swal.fire({
+    const confirmar = await Swal.fire({
       title: "¿Eliminar producto?",
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
@@ -153,7 +174,11 @@ const editarProducto = (p: Product) => {
     if (!confirmar.isConfirmed) return;
 
     if (!authTokensLocal) {
-      await Swal.fire({ icon: "error", title: "No autenticado", text: "Inicia sesión primero." });
+      await Swal.fire({
+        icon: "error",
+        title: "No autenticado",
+        text: "Inicia sesión primero.",
+      });
       return;
     }
 
@@ -165,18 +190,21 @@ const editarProducto = (p: Product) => {
       await fetch("/api/v1/products/" + codigo, {
         method: "DELETE",
         // Enviar token en el header Authorization para autenticación
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       setProductos(productos.filter((p) => p.codigo !== codigo));
-      await Swal.fire({ icon: "success", title: "Eliminado", text: "Producto eliminado correctamente." });
+      await Swal.fire({
+        icon: "success",
+        title: "Eliminado",
+        text: "Producto eliminado correctamente.",
+      });
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       alert("Error eliminando el producto: " + msg);
     }
-
   };
 
   return (
@@ -257,7 +285,7 @@ const editarProducto = (p: Product) => {
                 // Guardar archivo seleccionado
                 setSelectedFile(file);
 
-                setForm({...form, url: ""})
+                setForm({ ...form, url: "" });
               }
             }}
             style={{
@@ -273,11 +301,12 @@ const editarProducto = (p: Product) => {
             Arrastra la imagen aquí
           </div>
 
-
           {/* Previsualización */}
           {selectedFile && (
             <div style={{ textAlign: "center", marginBottom: "15px" }}>
-              <p><strong>Archivo seleccionado:</strong> {selectedFile.name}</p>
+              <p>
+                <strong>Archivo seleccionado:</strong> {selectedFile.name}
+              </p>
             </div>
           )}
           {form.url && (
@@ -320,18 +349,21 @@ const editarProducto = (p: Product) => {
           )}
         </div>
 
-
         {/* TABLA */}
         <h2>Lista de Productos</h2>
 
-       {isLoading ? (
-         <p>Cargando productos desde el backend...</p>
-       ) : error ? (
-         <p style={{ color: "red" }}>Error al cargar productos: {error}</p>
-       ) : null}
+        {isLoading ? (
+          <p>Cargando productos desde el backend...</p>
+        ) : error ? (
+          <p style={{ color: "red" }}>Error al cargar productos: {error}</p>
+        ) : null}
 
-
-        <table width="100%" border={1} cellPadding={8} style={{ borderCollapse: "collapse" }}>
+        <table
+          width="100%"
+          border={1}
+          cellPadding={8}
+          style={{ borderCollapse: "collapse" }}
+        >
           <thead>
             <tr style={{ background: "#ddd" }}>
               <th>Código</th>
@@ -353,7 +385,13 @@ const editarProducto = (p: Product) => {
                 <td>${p.precio}</td>
 
                 {/* URL como texto */}
-                <td style={{ fontSize: "12px", wordBreak: "break-all", maxWidth: "250px" }}>
+                <td
+                  style={{
+                    fontSize: "12px",
+                    wordBreak: "break-all",
+                    maxWidth: "250px",
+                  }}
+                >
                   {p.url}
                 </td>
 
@@ -387,7 +425,6 @@ const editarProducto = (p: Product) => {
                       cursor: "pointer",
                     }}
                   >
-                    
                     Eliminar
                   </button>
                 </td>
