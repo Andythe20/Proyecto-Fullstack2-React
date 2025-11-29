@@ -17,7 +17,6 @@
 }
 
 .icon{
-    color: var(--color-chocolate);
     font-size: 32px;
     display: inline-block;
     margin: 15px;
@@ -27,4 +26,24 @@
 
 .icon:hover{
     transform: translateY(-10px);
+}
+
+.linkedin{
+    color: #0A66C2;
+}
+
+.youtube{
+    color: #FF0000;
+}
+
+.facebook{
+    color: #1877F2;
+}
+
+.instagram{
+    color: #E1306C;
+}
+
+.twitter{
+    color: #1DA1F2;
 }

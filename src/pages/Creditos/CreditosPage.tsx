@@ -6,7 +6,7 @@ function CreditosPage() {
         <>
             <div className="col-12 mt-5 text-center titulo-container">
                 <br />
-                <h1>Desarrolladores detrás del proyecto</h1>
+                <h1 className="iluminacion-titulo">Desarrolladores detrás del proyecto</h1>
                 <br />
             </div>
 

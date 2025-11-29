@@ -1,0 +1,215 @@
+.perfil-container {
+  background: linear-gradient(90deg, var(--color-soft-pink) 0%, var(--color-blanco-roto) 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.perfil-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 50px;
+  animation: fadeInDown 0.6s ease;
+}
+
+.perfil-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.perfil-header p {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  opacity: 0.9;
+  color: #5d4037;
+}
+
+.perfil-card {
+
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  animation: fadeInUp 0.6s ease;
+}
+
+.perfil-item {
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.perfil-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.perfil-item:hover {
+  transform: translateX(5px);
+}
+
+.perfil-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.perfil-content {
+  flex: 1;
+}
+
+.perfil-label {
+  font-size: 0.85rem;
+  color: #999;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.perfil-value {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.perfil-actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-admin {
+    font: var(--font-primary-lato) !important;
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #a01181 0%, #e7ab7a 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-admin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.btn-admin:active {
+  transform: translateY(-1px);
+}
+
+.btn-secondary-action {
+    font: var(--font-primary-lato) !important;
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 30px;
+  background: #f0f0f0;
+  color: #000000;
+  border: 2px solid #422410;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-secondary-action:hover {
+  background: #ffc0cb;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.admin-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: rgb(211, 6, 149);
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  animation: pulse 3s infinite;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .perfil-header h1 {
+    font-size: 2rem;
+  }
+
+  .perfil-card {
+    padding: 25px;
+  }
+
+  .perfil-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .perfil-icon {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .perfil-actions {
+    flex-direction: column;
+  }
+
+  .btn-admin,
+  .btn-secondary-action {
+    min-width: 100%;
+  }
+}
