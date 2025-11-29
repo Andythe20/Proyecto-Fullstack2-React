@@ -12,6 +12,15 @@
   font-style: normal;
 }
 
+input,
+textarea,
+select,
+.form-control,
+.input-group-text {
+  font-family: var(--font-primary-lato) !important;
+  font-size: 1rem;
+}
+
 @media (max-width: 767.98px) {
   #logo-container {
     flex-direction: column !important;
