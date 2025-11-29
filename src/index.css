@@ -12,6 +12,15 @@
   font-style: normal;
 }
 
+input,
+textarea,
+select,
+.form-control,
+.input-group-text {
+  font-family: var(--font-primary-lato) !important;
+  font-size: 1rem;
+}
+
 @media (max-width: 767.98px) {
   #logo-container {
     flex-direction: column !important;
@@ -109,4 +118,16 @@ body h1 {
   color: var(--color-soft-pink);
   border-color: var(--color-soft-pink);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* sombra sutil */
+}
+
+/* Quitar flechas en Chrome, Edge, Safari, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Quitar flechas en Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
