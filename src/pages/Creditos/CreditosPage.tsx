@@ -114,7 +114,7 @@ function CreditosPage() {
 
                         <div className="d-flex gap-3">
                             <a
-                                href="www.linkedin.com/in/andy-ortega-a97706284/"
+                                href="https://www.linkedin.com/in/andy-ortega-a97706284/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-decoration-none"

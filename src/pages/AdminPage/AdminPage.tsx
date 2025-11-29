@@ -3,6 +3,7 @@ import useProductos from "../../hooks/useProductos";
 import type { Product } from "../../types/product";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import formatCurrency from "../../utils/formatCurrency";
 
 const AdminProductos: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -354,11 +355,11 @@ const AdminProductos: React.FC = () => {
                         className="form-control"
                         id="precio"
                         name="precio"
-                        placeholder="0.00"
+                        placeholder="0"
                         value={form.precio}
                         onChange={handleChange}
                         min="0"
-                        step="0.01"
+                        step="1"
                       />
                     </div>
                   </div>
@@ -537,11 +538,7 @@ const AdminProductos: React.FC = () => {
                           </td>
                           <td className="align-middle">
                             <strong className="text-success">
-                              $
-                              {(typeof p.precio === "number"
-                                ? p.precio
-                                : parseFloat(p.precio || "0")
-                              ).toFixed(2)}
+                              {formatCurrency(p.precio)}
                             </strong>
                           </td>
                           <td className="align-middle text-center">
